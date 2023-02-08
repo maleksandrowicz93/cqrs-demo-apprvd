@@ -10,7 +10,7 @@ class UpdatePasswordCommandHandler {
     private final StudentRepository studentRepository;
 
     boolean handle(long studentId, String password) throws InvalidCredentialsException, StudentNotFoundException {
-        if (password == null || password.isEmpty()) {
+        if (password == null || password.isBlank()) {
             throw new InvalidCredentialsException();
         }
         return studentRepository.findById(studentId)

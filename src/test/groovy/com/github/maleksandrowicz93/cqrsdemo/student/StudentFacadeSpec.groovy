@@ -79,7 +79,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty email"() {
         given: "a new student data with empty email"
-        def command = StudentUtils.addStudentCommand().email("")
+        def command = StudentUtils.addStudentCommand().email(" ")
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -101,7 +101,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty password"() {
         given: "a new student data with empty password"
-        def command = StudentUtils.addStudentCommand().password("")
+        def command = StudentUtils.addStudentCommand().password(" ")
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -177,7 +177,7 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         and: "user fill data to update with empty email"
-        def command = StudentUtils.editStudentDataCommand().email("")
+        def command = StudentUtils.editStudentDataCommand().email(" ")
 
         when: "user tries to edit student's data"
         facade.editStudentData(studentEntity.id, command)
@@ -191,7 +191,7 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         when: "user tries to update student's password"
-        def updated = facade.updatePassword(studentEntity.id, StudentUtils.PASSWORD)
+        def updated = facade.updatePassword(studentEntity.id, StudentUtils.ALTERNATIVE_PASSWORD)
 
         then: "password is successfully updated"
         updated
@@ -213,18 +213,18 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         when: "user tries to update a student's password"
-        facade.updatePassword(1, "")
+        facade.updatePassword(1, " ")
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
     }
 
-    def "should not update password when not exist"() {
+    def "should not update password when student not exist"() {
         given: "students' db is empty"
         studentRepository.deleteAll()
 
         when: "user tries to update a student's password"
-        facade.updatePassword(1, "xyz")
+        facade.updatePassword(1, StudentUtils.ALTERNATIVE_PASSWORD)
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)

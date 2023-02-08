@@ -13,9 +13,9 @@ class AddStudentCommandHandler {
 
     StudentDto handle(AddStudentCommand command) throws InvalidCredentialsException, StudentAlreadyExistsException {
         String email = command.getEmail();
-        boolean isEmailInvalid = email == null || email.isEmpty();
+        boolean isEmailInvalid = email == null || email.isBlank();
         String password = command.getPassword();
-        boolean isPasswordInvalid = password == null || password.isEmpty();
+        boolean isPasswordInvalid = password == null || password.isBlank();
         if (isEmailInvalid || isPasswordInvalid) {
             throw new InvalidCredentialsException();
         }

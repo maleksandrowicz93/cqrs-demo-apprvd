@@ -14,7 +14,7 @@ class EditStudentDataCommandHandler {
     StudentDto handle(long studentId, EditStudentDataCommand command)
             throws InvalidCredentialsException, StudentNotFoundException {
         String email = command.getEmail();
-        if (email == null || email.isEmpty()) {
+        if (email == null || email.isBlank()) {
             throw new InvalidCredentialsException();
         }
         return studentRepository.findById(studentId)
