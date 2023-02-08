@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentDataCommand
+
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
-@ContextConfiguration
 @SpringBootTest
-class StudentFacadeTest extends Specification {
+@ContextConfiguration
+class StudentFacadeSpec extends Specification {
 
     @Autowired
     StudentRepository studentRepository

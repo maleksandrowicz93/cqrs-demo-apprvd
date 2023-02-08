@@ -35,10 +35,10 @@ class StudentUtils {
 
     static def editStudentDataCommand() {
         EditStudentDataCommand.builder()
-                .email(EMAIL)
-                .firstName(FIRST_NAME)
-                .lastName(LAST_NAME)
-                .birthDate(BIRTH_DATE)
+                .email(ALTERNATIVE_EMAIL)
+                .firstName(ALTERNATIVE_FIRST_NAME)
+                .lastName(ALTERNATIVE_LAST_NAME)
+                .birthDate(ALTERNATIVE_BIRTH_DAY)
                 .build()
     }
 
