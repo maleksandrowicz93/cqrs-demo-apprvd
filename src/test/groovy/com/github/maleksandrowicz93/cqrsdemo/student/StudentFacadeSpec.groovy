@@ -68,7 +68,9 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no email"() {
         given: "a new student data with no email"
-        def command = StudentUtils.addStudentCommand().email(null)
+        def command = StudentUtils.addStudentCommand().toBuilder()
+                .email(null)
+                .build()
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -79,7 +81,9 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty email"() {
         given: "a new student data with empty email"
-        def command = StudentUtils.addStudentCommand().email(" ")
+        def command = StudentUtils.addStudentCommand().toBuilder()
+                .email(" ")
+                .build()
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -90,7 +94,9 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no password"() {
         given: "a new student data with no password"
-        def command = StudentUtils.addStudentCommand().password(null)
+        def command = StudentUtils.addStudentCommand().toBuilder()
+                .password(null)
+                .build()
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -101,7 +107,9 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty password"() {
         given: "a new student data with empty password"
-        def command = StudentUtils.addStudentCommand().password(" ")
+        def command = StudentUtils.addStudentCommand().toBuilder()
+                .password(" ")
+                .build()
 
         when: "user tries to add this student"
         facade.addStudent(command)
@@ -163,7 +171,9 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         and: "user fill data to update with no email"
-        def command = StudentUtils.editStudentDataCommand().email(null)
+        def command = StudentUtils.editStudentDataCommand().toBuilder()
+                .email(null)
+                .build()
 
         when: "user tries to edit student's data"
         facade.editStudentData(studentEntity.id, command)
@@ -177,7 +187,9 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         and: "user fill data to update with empty email"
-        def command = StudentUtils.editStudentDataCommand().email(" ")
+        def command = StudentUtils.editStudentDataCommand().toBuilder()
+                .email(" ")
+                .build()
 
         when: "user tries to edit student's data"
         facade.editStudentData(studentEntity.id, command)

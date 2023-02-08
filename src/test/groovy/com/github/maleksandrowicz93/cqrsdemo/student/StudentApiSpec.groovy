@@ -107,9 +107,10 @@ class StudentApiSpec extends Specification {
 
     def "should not add new student when invalid credentials"() {
         given: "completely new student's data"
-        def command = StudentUtils.addStudentCommand()
+        def command = StudentUtils.addStudentCommand().toBuilder()
                 .email(null)
                 .password(null)
+                .build()
 
         expect: "this student should not be be added at POST /student"
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
@@ -198,7 +199,9 @@ class StudentApiSpec extends Specification {
         def student = studentRepository.save(StudentUtils.studentToAdd())
 
         and: "new data for student update is prepared"
-        def command = StudentUtils.editStudentDataCommand().email(null)
+        def command = StudentUtils.editStudentDataCommand().toBuilder()
+                .email(null)
+                .build()
 
         expect: "this student should not be edited at PUT /student/{id}"
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
