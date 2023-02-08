@@ -1,8 +1,8 @@
-package com.github.maleksandrowicz93.cqrsdemo
+package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.user.dto.AddStudentCommand
-import com.github.maleksandrowicz93.cqrsdemo.user.dto.EditStudentDataCommand
-import com.github.maleksandrowicz93.cqrsdemo.user.dto.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentDataCommand
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 
 import java.time.LocalDate
 import java.time.Month

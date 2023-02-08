@@ -1,12 +1,12 @@
-package com.github.maleksandrowicz93.cqrsdemo
+package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.user.StudentFacade
-import com.github.maleksandrowicz93.cqrsdemo.user.dto.StudentDto
+
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import spock.lang.Specification
 
 class StudentFacadeTest extends Specification {
 
-    def facade = new StudentFacade()
+    def facade = new StudentConfig().studentFacade()
 
     def "get all students"() {
         given: "2 students exist in db"
