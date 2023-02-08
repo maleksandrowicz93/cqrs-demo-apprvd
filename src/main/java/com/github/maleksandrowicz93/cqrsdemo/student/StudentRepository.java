@@ -1,10 +1,8 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.github.maleksandrowicz93.cqrsdemo.interfaces.BaseRepository;
 
-@Repository
-public interface StudentRepository extends JpaRepository<Student, Long> {
+interface StudentRepository extends BaseRepository<Student, Long> {
 
     boolean existsByEmail(String email);
 }
