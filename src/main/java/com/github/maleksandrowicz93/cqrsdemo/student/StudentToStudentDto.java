@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.Converter;
+import com.github.maleksandrowicz93.cqrsdemo.interfaces.Converter;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 
 enum StudentToStudentDto implements Converter<Student, StudentDto> {
