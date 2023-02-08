@@ -37,8 +37,7 @@ public class StudentFacade {
         return editstudentDataCommandHandler.handle(studentId, command);
     }
 
-    public boolean updatePassword(long studentId, String password)
-            throws InvalidCredentialsException, StudentNotFoundException {
+    public boolean updatePassword(long studentId, String password) throws InvalidCredentialsException, StudentNotFoundException {
         return updatePasswordCommandHandler.handle(studentId, password);
     }
 

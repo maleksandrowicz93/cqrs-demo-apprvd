@@ -10,8 +10,8 @@ class AddStudentCommandHandler {
     private final StudentRepository studentRepository;
 
     StudentDto handle(AddStudentCommand command) {
-        Student student = AddStudentCommandToStudent.INSTANCE.convert(command);
+        Student student = StudentConverters.ADD_STUDENT_COMMAND_TO_STUDENT.convert(command);
         student = studentRepository.save(student);
-        return StudentToStudentDto.INSTANCE.convert(student);
+        return StudentConverters.STUDENT_TO_STUDENT_DTO.convert(student);
     }
 }
