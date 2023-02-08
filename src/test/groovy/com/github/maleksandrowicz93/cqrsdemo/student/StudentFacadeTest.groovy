@@ -1,18 +1,30 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
+@ContextConfiguration
+@SpringBootTest
 class StudentFacadeTest extends Specification {
 
-    def facade = new StudentConfig().studentFacade()
+    @Autowired
+    StudentRepository studentRepository
+    @Autowired
+    StudentFacade facade
+
+    def setup() {
+        studentRepository.deleteAll()
+    }
 
     def "get all students"() {
         given: "2 students exist in db"
-        facade.addStudent(StudentUtils.addStudentCommand())
-        facade.addStudent(StudentUtils.alternativeAddStudentCommand())
-        def expectedStudents = List.of(StudentUtils.studentDto(), StudentUtils.alternativeStudentDto())
+        def student1 = studentRepository.save(StudentUtils.studentToAdd())
+        def student2 = studentRepository.save(StudentUtils.alternativeStudentToAdd())
+        def expectedStudents = List.of(StudentUtils.studentDto(student1.id),
+                StudentUtils.alternativeStudentDto(student2.id))
 
         when: "user tries to retrieve them"
         def students = facade.getAllStudents()
@@ -23,23 +35,22 @@ class StudentFacadeTest extends Specification {
     }
 
     def "add new student"() {
-        given: "there is a completely new student data to be added to db"
-        def expectedStudent = StudentUtils.studentDto()
-
         when: "user tries to add a new student"
         def student = facade.addStudent(StudentUtils.addStudentCommand())
 
         then: "this student should be successfully added"
+        def expectedStudent = StudentUtils.studentDto(student.id)
         student == expectedStudent
     }
 
     def "get student"() {
         given: "a student exists in db"
-        facade.addStudent(StudentUtils.addStudentCommand())
-        def expectedStudent = StudentUtils.studentDto()
+        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def id = studentEntity.id
+        def expectedStudent = StudentUtils.studentDto(id)
 
         when: "user tries to retrieve student's data by student's id"
-        def student = facade.getStudent(StudentUtils.ID)
+        def student = facade.getStudent(id)
 
         then: "gets his correct data"
         student == expectedStudent
@@ -47,11 +58,12 @@ class StudentFacadeTest extends Specification {
 
     def "edit student"() {
         given: "a student exists in db"
-        facade.addStudent(StudentUtils.addStudentCommand())
-        def expectedStudent = StudentUtils.studentDto()
+        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def id = studentEntity.id
+        def expectedStudent = StudentUtils.studentDto(id)
 
         when: "user tries to edit student's data"
-        def student = facade.editStudentData(StudentUtils.ID, StudentUtils.editStudentDataCommand())
+        def student = facade.editStudentData(id, StudentUtils.editStudentDataCommand())
 
         then: "data is successfully edited"
         student == expectedStudent
@@ -59,10 +71,10 @@ class StudentFacadeTest extends Specification {
 
     def "update password"() {
         given: "a student exists in db"
-        facade.addStudent(StudentUtils.addStudentCommand())
+        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         when: "user tries to update student's password"
-        def updated = facade.updatePassword(StudentUtils.ID, StudentUtils.PASSWORD)
+        def updated = facade.updatePassword(studentEntity.id, StudentUtils.PASSWORD)
 
         then: "password is successfully updated"
         updated
@@ -70,10 +82,10 @@ class StudentFacadeTest extends Specification {
 
     def "delete student"() {
         given: "a student exists in db"
-        facade.addStudent(StudentUtils.addStudentCommand())
+        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
 
         when: "user tries to delete student's account"
-        def deleted = facade.deleteStudent(StudentUtils.ID)
+        def deleted = facade.deleteStudent(studentEntity.id)
 
         then: "account is successfully deleted"
         deleted
