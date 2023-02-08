@@ -9,9 +9,8 @@ import java.time.LocalDate;
 @Data
 @Builder
 @RequiredArgsConstructor
-public class AddStudentCommand {
+public class EditStudentDataCommand {
     private final String email;
-    private final String password;
     private final String firstName;
     private final String lastName;
     private final LocalDate birthDate;

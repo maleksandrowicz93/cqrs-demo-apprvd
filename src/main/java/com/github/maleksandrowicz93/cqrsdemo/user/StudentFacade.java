@@ -15,15 +15,15 @@ public class StudentFacade {
     }
 
     public StudentDto addStudent(AddStudentCommand command) {
-        return new StudentDto();
+        return StudentDto.builder().build();
     }
 
     public StudentDto getStudent(String studentId) {
-        return new StudentDto();
+        return StudentDto.builder().build();
     }
 
-    public StudentDto editStudentData(String studentId, EditStudentCommand command) {
-        return new StudentDto();
+    public StudentDto editStudentData(String studentId, EditStudentDataCommand command) {
+        return StudentDto.builder().build();
     }
 
     public boolean updatePassword(String studentId, String password) {
