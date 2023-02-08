@@ -9,7 +9,10 @@ class EditStudentDataCommandHandler {
 
     private final StudentRepository studentRepository;
 
-    StudentDto handle(int studentId, EditStudentDataCommand command) {
-        return StudentDto.builder().build();
+    StudentDto handle(long studentId, EditStudentDataCommand command) {
+        Student student = EditStudentDataCommandToStudent.INSTANCE.convert(command);
+        student.setId(studentId);
+        student = studentRepository.save(student);
+        return StudentToStudentDto.INSTANCE.convert(student);
     }
 }

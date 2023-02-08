@@ -24,19 +24,19 @@ public class StudentFacade {
         return addStudentCommandHandler.handle(command);
     }
 
-    public StudentDto getStudent(int studentId) {
+    public StudentDto getStudent(long studentId) {
         return studentQueryHandler.findStudentById(studentId);
     }
 
-    public StudentDto editStudentData(int studentId, EditStudentDataCommand command) {
+    public StudentDto editStudentData(long studentId, EditStudentDataCommand command) {
         return editstudentDataCommandHandler.handle(studentId, command);
     }
 
-    public boolean updatePassword(int studentId, String password) {
+    public boolean updatePassword(long studentId, String password) {
         return updatePasswordCommandHandler.handle(studentId, password);
     }
 
-    public boolean deleteStudent(int studentId) {
+    public boolean deleteStudent(long studentId) {
         return deleteStudentCommandHandler.handle(studentId);
     }
 }

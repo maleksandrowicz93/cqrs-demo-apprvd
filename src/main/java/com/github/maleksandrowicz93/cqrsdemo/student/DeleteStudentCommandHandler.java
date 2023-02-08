@@ -7,7 +7,8 @@ class DeleteStudentCommandHandler {
 
     private final StudentRepository studentRepository;
 
-    boolean handle(int studentId) {
-        return false;
+    boolean handle(long studentId) {
+        studentRepository.deleteById(studentId);
+        return true;
     }
 }

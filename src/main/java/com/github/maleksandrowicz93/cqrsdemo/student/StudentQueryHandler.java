@@ -12,10 +12,14 @@ class StudentQueryHandler {
     private final StudentRepository studentRepository;
 
     List<StudentDto> findAllStudents() {
-        return new ArrayList<>();
+        return studentRepository.findAll().stream()
+                .map(StudentToStudentDto.INSTANCE::convert)
+                .toList();
     }
 
-    StudentDto findStudentById(int studentId) {
-        return StudentDto.builder().build();
+    StudentDto findStudentById(long studentId) {
+        return studentRepository.findById(studentId)
+                .map(StudentToStudentDto.INSTANCE::convert)
+                .orElse(null);
     }
 }
