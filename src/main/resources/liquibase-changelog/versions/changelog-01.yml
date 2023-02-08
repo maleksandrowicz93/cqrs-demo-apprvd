@@ -2,3 +2,33 @@ databaseChangeLog:
   - changeSet:
       id: 0
       author: maleksandrowicz93
+      changes:
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_student_id
+                  name: id
+                  type: int
+              - column:
+                  name: email
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: unique_patient_email
+              - column:
+                  name: password
+                  type: varchar(50)
+              - column:
+                  name: first_name
+                  type: varchar(20)
+              - column:
+                  name: last_name
+                  type: varchar(20)
+              - column:
+                  name: birth_date
+                  type: date
