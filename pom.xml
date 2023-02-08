@@ -125,9 +125,9 @@
 						<configuration>
 							<inputSpec>api-spec/student-api.yml</inputSpec>
 							<generatorName>spring</generatorName>
-							<packageName>${project.groupId}.cqrsdemo.user</packageName>
-							<apiPackage>${project.groupId}.cqrsdemo.user.api</apiPackage>
-							<modelPackage>${project.groupId}.cqrsdemo.user.dto</modelPackage>
+							<packageName>${project.groupId}.cqrsdemo.student</packageName>
+							<apiPackage>${project.groupId}.cqrsdemo.student.api</apiPackage>
+							<modelPackage>${project.groupId}.cqrsdemo.student.dto</modelPackage>
 							<generateModelDocumentation>false</generateModelDocumentation>
 							<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 							<configOptions>
