@@ -22,11 +22,15 @@ public class StudentFacade {
         return new StudentDto();
     }
 
-    public StudentDto updateStudent(String studentId, EditStudentCommand command) {
+    public StudentDto editStudentData(String studentId, EditStudentCommand command) {
         return new StudentDto();
     }
 
-    public void updatePassword(String studentId, String password) {}
+    public boolean updatePassword(String studentId, String password) {
+        return false;
+    }
 
-    public void deleteStudent(String studentId) {}
+    public boolean deleteStudent(String studentId) {
+        return false;
+    }
 }
