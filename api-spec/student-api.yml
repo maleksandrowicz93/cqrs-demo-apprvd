@@ -50,6 +50,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
     get:
       tags:
         - student
@@ -86,6 +90,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
     put:
       tags:
         - student
@@ -115,6 +123,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
     patch:
       tags:
         - student
@@ -136,6 +150,7 @@ paths:
         content:
           application/json:
             schema:
+              description: New password of a student
               type: string
               example: password123
       responses:
@@ -146,6 +161,12 @@ paths:
               schema:
                 type: boolean
                 example: true
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
     delete:
       tags:
         - student
@@ -163,13 +184,36 @@ paths:
             example: 10
       responses:
         '200':
-          description: Student's acound data edit status
+          description: Student's account data edit status
           content:
             application/json:
               schema:
                 type: boolean
                 example: true
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
 components:
+  responses:
+    400BadRequest:
+      description: Bad Request error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    404NotFound:
+      description: Not Found error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    500InternalServerError:
+      description: Unknown error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     StudentDtoList:
       description: List of students
@@ -179,7 +223,6 @@ components:
     StudentDto:
       description: Model representing a student account data
       type: object
-      readOnly: true
       required:
         - id
       properties:
@@ -192,7 +235,6 @@ components:
     BasicStudentData:
       description: Model representing basic reusable student's data
       type: object
-      readOnly: true
       required:
         - email
         - firstName
@@ -215,19 +257,26 @@ components:
     AddStudentCommand:
       description: Model representing data of student to be added
       type: object
-      readOnly: true
       required:
         - password
       properties:
         password:
           type: string
-          readOnly: true
           example: password123
       allOf:
         - $ref: '#/components/schemas/BasicStudentData'
     EditStudentDataCommand:
       description: Model representing new data of student to be edited
       type: object
-      readOnly: true
       allOf:
         - $ref: '#/components/schemas/BasicStudentData'
+    ErrorResponse:
+      description: Model representing response in case of any exception thrown in application
+      type: object
+      properties:
+        code:
+          type: string
+          example: STUDENT_NOT_FOUND
+        message:
+          type: string
+          example: Student not found.
