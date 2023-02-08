@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -16,9 +17,9 @@ class StudentQueryHandler {
                 .toList();
     }
 
-    StudentDto findStudentById(long studentId) {
+    StudentDto findStudentById(long studentId) throws StudentNotFoundException {
         return studentRepository.findById(studentId)
                 .map(StudentConverters.STUDENT_TO_STUDENT_DTO::convert)
-                .orElse(null);
+                .orElseThrow(StudentNotFoundException::new);
     }
 }
