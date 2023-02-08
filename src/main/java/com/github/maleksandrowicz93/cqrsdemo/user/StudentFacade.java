@@ -1,5 +1,8 @@
 package com.github.maleksandrowicz93.cqrsdemo.user;
 
+import com.github.maleksandrowicz93.cqrsdemo.user.dto.AddStudentCommand;
+import com.github.maleksandrowicz93.cqrsdemo.user.dto.EditStudentDataCommand;
+import com.github.maleksandrowicz93.cqrsdemo.user.dto.StudentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,19 +21,19 @@ public class StudentFacade {
         return StudentDto.builder().build();
     }
 
-    public StudentDto getStudent(String studentId) {
+    public StudentDto getStudent(int studentId) {
         return StudentDto.builder().build();
     }
 
-    public StudentDto editStudentData(String studentId, EditStudentDataCommand command) {
+    public StudentDto editStudentData(int studentId, EditStudentDataCommand command) {
         return StudentDto.builder().build();
     }
 
-    public boolean updatePassword(String studentId, String password) {
+    public boolean updatePassword(int studentId, String password) {
         return false;
     }
 
-    public boolean deleteStudent(String studentId) {
+    public boolean deleteStudent(int studentId) {
         return false;
     }
 }
