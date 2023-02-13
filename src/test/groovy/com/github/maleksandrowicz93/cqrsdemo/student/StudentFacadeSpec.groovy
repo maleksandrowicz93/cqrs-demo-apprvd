@@ -1,12 +1,13 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
+import com.github.maleksandrowicz93.cqrsdemo.student.exception.PasswordNotUpdatedException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
@@ -20,47 +21,49 @@ class StudentFacadeSpec extends Specification {
     StudentFacade facade
 
     def setup() {
-        studentRepository.deleteAll()
+        def pageRequest = PageRequest.of(0, 10)
+        def pageNumber = studentRepository.findAll(pageRequest).getTotalPages()
+        for (i in 0..<pageNumber) {
+            studentRepository.findAll(pageRequest).getContent()
+                    .forEach(student -> studentRepository.deleteById(student.id()))
+        }
     }
 
     def "get all students"() {
         given: "2 students exist in db"
-        def student1 = studentRepository.save(StudentUtils.studentToAdd())
-        def student2 = studentRepository.save(StudentUtils.alternativeStudentToAdd())
-        def expectedStudents = List.of(StudentUtils.studentDto(student1.id),
-                StudentUtils.alternativeStudentDto(student2.id))
+        def firstStudent = studentRepository.save(Students.FIRST.studentToAdd())
+        def secondStudent = studentRepository.save(Students.SECOND.studentToAdd())
+        def expectedStudents = List.of(Students.FIRST.studentIdentification(firstStudent.id()),
+                Students.SECOND.studentIdentification(secondStudent.id()))
 
         when: "user tries to retrieve them"
-        def students = facade.getAllStudents()
+        def students = facade.getAllStudents(0, 10)
 
         then: "gets exactly these students and no more"
         students.size() == 2
-        students.eachWithIndex { StudentDto student, int i -> student == expectedStudents.get(i) }
+        students.eachWithIndex { StudentIdentification student, int i -> student == expectedStudents.get(i) }
     }
 
     def "get empty student list when no student exists"() {
-        given: "students' db is empty"
-        studentRepository.deleteAll()
-
-        expect: "list of students is empty"
-        facade.getAllStudents().size() == 0
+        expect: "list of students retrieved from empty db is empty"
+        facade.getAllStudents(0, 10).size() == 0
     }
 
     def "add new student"() {
         when: "user tries to add a new student"
-        def student = facade.addStudent(StudentUtils.addStudentCommand())
+        def student = facade.addStudent(Students.FIRST.saveStudentRequest())
 
         then: "this student should be successfully added"
-        def expectedStudent = StudentUtils.studentDto(student.id)
+        def expectedStudent = Students.FIRST.studentDto(student.id())
         student == expectedStudent
     }
 
     def "should not add student when already exists"() {
         given: "student exists in db"
-        studentRepository.save(StudentUtils.studentToAdd())
+        studentRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to add this student"
-        facade.addStudent(StudentUtils.addStudentCommand())
+        facade.addStudent(Students.FIRST.saveStudentRequest())
 
         then: "StudentAlreadyExistsException is thrown"
         thrown(StudentAlreadyExistsException)
@@ -68,7 +71,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no email"() {
         given: "a new student data with no email"
-        def command = StudentUtils.addStudentCommand().toBuilder()
+        def command = Students.FIRST.saveStudentRequest().toBuilder()
                 .email(null)
                 .build()
 
@@ -81,7 +84,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty email"() {
         given: "a new student data with empty email"
-        def command = StudentUtils.addStudentCommand().toBuilder()
+        def command = Students.FIRST.saveStudentRequest().toBuilder()
                 .email(" ")
                 .build()
 
@@ -94,7 +97,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no password"() {
         given: "a new student data with no password"
-        def command = StudentUtils.addStudentCommand().toBuilder()
+        def command = Students.FIRST.saveStudentRequest().toBuilder()
                 .password(null)
                 .build()
 
@@ -107,7 +110,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty password"() {
         given: "a new student data with empty password"
-        def command = StudentUtils.addStudentCommand().toBuilder()
+        def command = Students.FIRST.saveStudentRequest().toBuilder()
                 .password(" ")
                 .build()
 
@@ -120,9 +123,9 @@ class StudentFacadeSpec extends Specification {
 
     def "get student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
-        def id = studentEntity.id
-        def expectedStudent = StudentUtils.studentDto(id)
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def id = studentEntity.id()
+        def expectedStudent = Students.FIRST.studentDto(id)
 
         when: "user tries to retrieve student's data by student's id"
         def student = facade.getStudent(id)
@@ -132,11 +135,8 @@ class StudentFacadeSpec extends Specification {
     }
 
     def "should not get student when not exist"() {
-        given: "students' db is empty"
-        studentRepository.deleteAll()
-
-        when: "user tries to retrieve a student"
-        facade.getStudent(1)
+        when: "user tries to retrieve a student from empty db"
+        facade.getStudent(UUID.randomUUID())
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)
@@ -144,77 +144,42 @@ class StudentFacadeSpec extends Specification {
 
     def "edit student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
-        def id = studentEntity.id
-        def expectedStudent = StudentUtils.alternativeStudentDto(id)
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def id = studentEntity.id()
+        def expectedStudent = Students.SECOND.studentDto(id)
 
         when: "user tries to edit student's data"
-        def student = facade.editStudentData(id, StudentUtils.editStudentDataCommand())
+        def student = facade.editStudentData(id, Students.SECOND.saveStudentRequest())
 
         then: "data is successfully edited"
         student == expectedStudent
     }
 
     def "should not edit student when not exist"() {
-        given: "students' db is empty"
-        studentRepository.deleteAll()
-
-        when: "user tries to edit a student"
-        facade.editStudentData(1, StudentUtils.editStudentDataCommand())
+        when: "user tries to edit a student in empty db"
+        facade.editStudentData(UUID.randomUUID(), Students.FIRST.saveStudentRequest())
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)
     }
 
-    def "should not edit student when no email"() {
-        given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
-
-        and: "user fill data to update with no email"
-        def command = StudentUtils.editStudentDataCommand().toBuilder()
-                .email(null)
-                .build()
-
-        when: "user tries to edit student's data"
-        facade.editStudentData(studentEntity.id, command)
-
-        then: "InvalidCredentialsException is thrown"
-        thrown(InvalidCredentialsException)
-    }
-
-    def "should not edit student when empty email"() {
-        given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
-
-        and: "user fill data to update with empty email"
-        def command = StudentUtils.editStudentDataCommand().toBuilder()
-                .email(" ")
-                .build()
-
-        when: "user tries to edit student's data"
-        facade.editStudentData(studentEntity.id, command)
-
-        then: "InvalidCredentialsException is thrown"
-        thrown(InvalidCredentialsException)
-    }
-
     def "update password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
 
-        when: "user tries to update student's password"
-        def updated = facade.updatePassword(studentEntity.id, StudentUtils.ALTERNATIVE_PASSWORD)
+        and: "there is a new password to update the current one"
+        def newPassword = Students.SECOND.saveStudentRequest().password()
 
-        then: "password is successfully updated"
-        updated
+        expect: "his password can be successfully updated"
+        facade.updatePassword(studentEntity.id(), newPassword)
     }
 
     def "should not update password when no password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to update a student's password"
-        facade.updatePassword(1, null)
+        facade.updatePassword(student.id(), null)
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
@@ -222,43 +187,45 @@ class StudentFacadeSpec extends Specification {
 
     def "should not update password when empty password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to update a student's password"
-        facade.updatePassword(1, " ")
+        facade.updatePassword(student.id(), " ")
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
     }
 
     def "should not update password when student not exist"() {
-        given: "students' db is empty"
-        studentRepository.deleteAll()
-
-        when: "user tries to update a student's password"
-        facade.updatePassword(1, StudentUtils.ALTERNATIVE_PASSWORD)
+        when: "user tries to update a student's password in empty db"
+        facade.updatePassword(UUID.randomUUID(), "NEW_PASSWORD")
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)
     }
 
+    def "should not update password when no change"() {
+        given: "a student exists in db"
+        def student = studentRepository.save(Students.FIRST.studentToAdd())
+
+        when: "user tries to update a student's password with the same value"
+        facade.updatePassword(student.id(), Students.FIRST.saveStudentRequest().password())
+
+        then: "PasswordNotUpdatedException is thrown"
+        thrown(PasswordNotUpdatedException)
+    }
+
     def "delete student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(StudentUtils.studentToAdd())
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
 
-        when: "user tries to delete student's account"
-        def deleted = facade.deleteStudent(studentEntity.id)
-
-        then: "account is successfully deleted"
-        deleted
+        expect: "his account can be successfully deleted"
+        facade.deleteStudent(studentEntity.id())
     }
 
     def "should not delete student when not exist"() {
-        given: "students' db is empty"
-        studentRepository.deleteAll()
-
-        when: "user tries to delete a student"
-        facade.deleteStudent(1)
+        when: "user tries to delete a student from empty db"
+        facade.deleteStudent(UUID.randomUUID())
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)
