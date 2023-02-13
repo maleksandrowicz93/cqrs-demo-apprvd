@@ -7,22 +7,21 @@ databaseChangeLog:
             tableName: student
             columns:
               - column:
-                  autoIncrement: true
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: pk_student_id
                   name: id
-                  type: int
+                  type: uuid
               - column:
                   name: email
                   type: varchar(50)
                   constraints:
                     unique: true
-                    uniqueConstraintName: unique_patient_email
+                    uniqueConstraintName: unique_student_email
               - column:
                   name: password
-                  type: varchar(50)
+                  type: binary(60)
               - column:
                   name: first_name
                   type: varchar(20)
