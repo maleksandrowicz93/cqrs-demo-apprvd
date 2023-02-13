@@ -3,13 +3,13 @@ package com.github.maleksandrowicz93.cqrsdemo.student.exception;
 import lombok.Getter;
 
 @Getter
-public abstract class StudentException extends Exception {
+abstract class StudentException extends RuntimeException {
 
-    private final ErrorMessage errorMessage;
+    final ErrorMessage errorMessage;
 
 
     protected StudentException(ErrorMessage errorMessage) {
-        super(errorMessage.getMessage());
+        super(errorMessage.message());
         this.errorMessage = errorMessage;
     }
 }

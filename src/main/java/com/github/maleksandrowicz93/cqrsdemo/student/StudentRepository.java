@@ -2,7 +2,9 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.interfaces.BaseRepository;
 
-interface StudentRepository extends BaseRepository<Student, Long> {
+import java.util.UUID;
+
+interface StudentRepository extends BaseRepository<Student, UUID> {
 
     boolean existsByEmail(String email);
 }

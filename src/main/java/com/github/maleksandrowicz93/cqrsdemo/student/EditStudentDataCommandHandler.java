@@ -1,30 +1,50 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentDataCommand;
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException;
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
+@Log4j2
+@Component
 @RequiredArgsConstructor
 class EditStudentDataCommandHandler {
 
-    private final StudentRepository studentRepository;
+    final StudentRepository studentRepository;
+    final PasswordEncoder passwordEncoder;
+    final StudentMapper studentMapper;
 
-    StudentDto handle(long studentId, EditStudentDataCommand command)
-            throws InvalidCredentialsException, StudentNotFoundException {
-        String email = command.getEmail();
-        if (email == null || email.isBlank()) {
-            throw new InvalidCredentialsException();
+    StudentDto handle(UUID studentId, SaveStudentRequest command) {
+        if (!studentRepository.existsById(studentId)) {
+            log.error("Not found student with id: {}", studentId);
+            throw new StudentNotFoundException();
         }
-        return studentRepository.findById(studentId)
-                .map(student -> {
-                    Student newData = StudentConverters.EDIT_STUDENT_DATA_COMMAND_TO_STUDENT.convert(command);
-                    newData.setId(studentId);
-                    return newData;
-                })
-                .map(studentRepository::save)
-                .map(StudentConverters.STUDENT_TO_STUDENT_DTO::convert)
-                .orElseThrow(StudentNotFoundException::new);
+        var studentBuilder = Student.builder().id(studentId);
+        if (StringUtils.isNotBlank(command.email())) {
+            studentBuilder.email(command.email());
+        }
+        if (StringUtils.isNotBlank(command.password())) {
+            studentBuilder.password(command.password());
+        }
+        if (StringUtils.isNotBlank(command.firstName())) {
+            studentBuilder.firstName(command.firstName());
+        }
+        if (StringUtils.isNotBlank(command.lastName())) {
+            studentBuilder.lastName(command.lastName());
+        }
+        if (command.birthDate() != null) {
+            studentBuilder.birthDate(command.birthDate());
+        }
+        var student = studentBuilder.build();
+        var encodedPassword = passwordEncoder.encode(student.password());
+        student.password(encodedPassword);
+        var savedStudent = studentRepository.save(student);
+        return studentMapper.toStudentDto(savedStudent);
     }
 }
