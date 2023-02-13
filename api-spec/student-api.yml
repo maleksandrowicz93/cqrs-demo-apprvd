@@ -42,7 +42,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddStudentCommand'
+              $ref: '#/components/schemas/SaveStudentRequest'
       responses:
         '200':
           description: Added student's data
@@ -60,13 +60,36 @@ paths:
       summary: Get all students
       description: Retrieves all students' accounts data
       operationId: findAllStudents
+      parameters:
+        - name: page
+          in: query
+          description: number of result's page
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+            example: 0
+        - name: size
+          in: query
+          description: sie of result's page
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 5
+            default: 10
+            example: 10
       responses:
         '200':
           description: List of all students
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentDtoList'
+                $ref: '#/components/schemas/StudentIdentificationList'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
   /student/{id}:
     get:
       tags:
@@ -80,9 +103,7 @@ paths:
           description: id of a student
           required: true
           schema:
-            type: integer
-            format: int64
-            example: 10
+            $ref: '#/components/schemas/UUID'
       responses:
         '200':
           description: Found student's data
@@ -103,19 +124,17 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Student's id to be added
+          description: id of a student
           required: true
           schema:
-            type: integer
-            format: int64
-            example: 10
+            $ref: '#/components/schemas/UUID'
       requestBody:
         description: new student's account data
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditStudentDataCommand'
+              $ref: '#/components/schemas/SaveStudentRequest'
       responses:
         '200':
           description: Added student's data
@@ -123,44 +142,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
-        '400':
-          $ref: '#/components/responses/400BadRequest'
-        '404':
-          $ref: '#/components/responses/404NotFound'
-        '500':
-          $ref: '#/components/responses/500InternalServerError'
-    patch:
-      tags:
-        - student
-      summary: Update password
-      description: Updates a student's password
-      operationId: updatePassword
-      parameters:
-        - name: id
-          in: path
-          description: Student's id to be deleted
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 10
-      requestBody:
-        description: new password
-        required: true
-        content:
-          application/json:
-            schema:
-              description: New password of a student
-              type: string
-              example: password123
-      responses:
-        '200':
-          description: Student's password change status
-          content:
-            application/json:
-              schema:
-                type: boolean
-                example: true
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -176,20 +157,46 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Student's id to be deleted
+          description: id of a student
           required: true
           schema:
-            type: integer
-            format: int64
-            example: 10
+            $ref: '#/components/schemas/UUID'
       responses:
         '200':
           description: Student's account data edit status
-          content:
-            application/json:
-              schema:
-                type: boolean
-                example: true
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+  /student/{id}/password:
+    patch:
+      tags:
+        - student
+      summary: Update password
+      description: Updates a student's password
+      operationId: updatePassword
+      parameters:
+        - name: id
+          in: path
+          description: id of a student
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      requestBody:
+        description: new password
+        required: true
+        content:
+          application/json:
+            schema:
+              description: New password of a student
+              type: string
+              format: password
+              example: password123
+      responses:
+        '200':
+          description: Student's password change status
+        '400':
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         '500':
@@ -215,11 +222,28 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    StudentDtoList:
+    StudentIdentificationList:
       description: List of students
       type: array
       items:
-        $ref: '#/components/schemas/StudentDto'
+        $ref: '#/components/schemas/StudentIdentification'
+    StudentIdentification:
+      description: Model representing a student account data
+      type: object
+      required:
+        - id
+        - email
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        email:
+          type: string
+          example: john.paul@gmail.com
+    UUID:
+      description: uuid for schemas
+      type: string
+      format: uuid
+      example: 78999bb1-bddb-48d9-966f-927e53a21657
     StudentDto:
       description: Model representing a student account data
       type: object
@@ -227,9 +251,7 @@ components:
         - id
       properties:
         id:
-          type: integer
-          format: int64
-          example: 10
+          $ref: '#/components/schemas/UUID'
       allOf:
         - $ref: '#/components/schemas/BasicStudentData'
     BasicStudentData:
@@ -237,9 +259,6 @@ components:
       type: object
       required:
         - email
-        - firstName
-        - lastName
-        - birthDate
       properties:
         email:
           type: string
@@ -254,20 +273,16 @@ components:
           type: string
           format: date
           example: 21-08-1993
-    AddStudentCommand:
-      description: Model representing data of student to be added
+    SaveStudentRequest:
+      description: Model representing data of student to be saved
       type: object
       required:
         - password
       properties:
         password:
           type: string
+          format: password
           example: password123
-      allOf:
-        - $ref: '#/components/schemas/BasicStudentData'
-    EditStudentDataCommand:
-      description: Model representing new data of student to be edited
-      type: object
       allOf:
         - $ref: '#/components/schemas/BasicStudentData'
     ErrorResponse:
