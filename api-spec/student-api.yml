@@ -169,7 +169,7 @@ paths:
         '500':
           $ref: '#/components/responses/500InternalServerError'
   /student/{id}/password:
-    patch:
+    put:
       tags:
         - student
       summary: Update password
