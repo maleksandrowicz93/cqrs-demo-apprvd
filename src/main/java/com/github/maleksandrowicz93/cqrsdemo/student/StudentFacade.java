@@ -4,18 +4,20 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 import java.util.UUID;
 
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 public class StudentFacade {
 
-    final StudentQueryHandler studentQueryHandler;
-    final AddStudentCommandHandler addStudentCommandHandler;
-    final EditStudentDataCommandHandler editstudentDataCommandHandler;
-    final UpdatePasswordCommandHandler updatePasswordCommandHandler;
-    final DeleteStudentCommandHandler deleteStudentCommandHandler;
+    StudentQueryHandler studentQueryHandler;
+    AddStudentCommandHandler addStudentCommandHandler;
+    EditStudentDataCommandHandler editstudentDataCommandHandler;
+    UpdatePasswordCommandHandler updatePasswordCommandHandler;
+    DeleteStudentCommandHandler deleteStudentCommandHandler;
 
     public List<StudentIdentification> getAllStudents(int page, int size) {
         return studentQueryHandler.findAllStudents(page, size);

@@ -7,7 +7,6 @@ abstract class StudentException extends RuntimeException {
 
     final ErrorMessage errorMessage;
 
-
     protected StudentException(ErrorMessage errorMessage) {
         super(errorMessage.message());
         this.errorMessage = errorMessage;

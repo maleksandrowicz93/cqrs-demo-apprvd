@@ -2,17 +2,19 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Log4j2
+@Slf4j
 @Component
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 class DeleteStudentCommandHandler {
 
-    final StudentRepository studentRepository;
+    StudentRepository studentRepository;
 
     void handle(UUID studentId) {
         if (!studentRepository.existsById(studentId)) {

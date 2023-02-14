@@ -4,21 +4,23 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Log4j2
+@Slf4j
 @Component
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 class EditStudentDataCommandHandler {
 
-    final StudentRepository studentRepository;
-    final PasswordEncoder passwordEncoder;
-    final StudentMapper studentMapper;
+    StudentRepository studentRepository;
+    PasswordEncoder passwordEncoder;
+    StudentMapper studentMapper;
 
     StudentDto handle(UUID studentId, SaveStudentRequest command) {
         if (!studentRepository.existsById(studentId)) {

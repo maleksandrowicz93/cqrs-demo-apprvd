@@ -13,7 +13,6 @@ interface StudentMapper {
     @Mapping(target = "email", expression = "java(student.email())")
     StudentIdentification toStudentIdentification(Student student);
 
-
     @Mapping(target = "id", expression = "java(student.id())")
     @Mapping(target = "email", expression = "java(student.email())")
     @Mapping(target = "firstName", expression = "java(student.firstName())")

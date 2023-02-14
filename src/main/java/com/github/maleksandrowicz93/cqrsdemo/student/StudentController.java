@@ -5,6 +5,7 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,10 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 class StudentController implements StudentApi {
 
-    final StudentFacade studentFacade;
+    StudentFacade studentFacade;
 
     @Override
     public ResponseEntity<List<StudentIdentification>> findAllStudents(Integer page, Integer size) {

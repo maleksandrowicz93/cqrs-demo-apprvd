@@ -5,26 +5,30 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException;
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Log4j2
+@Slf4j
 @Component
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 class AddStudentCommandHandler {
 
-    final StudentRepository studentRepository;
-    final PasswordEncoder passwordEncoder;
-    final StudentMapper studentMapper;
+    StudentRepository studentRepository;
+    PasswordEncoder passwordEncoder;
+    StudentMapper studentMapper;
 
     StudentDto handle(SaveStudentRequest command) {
         var email = command.email();
-        var blankEmail = StringUtils.isBlank(email);
-        var blankPassword = StringUtils.isBlank(command.password());
-        if (blankEmail || blankPassword) {
-            log.error("Invalid email or password. Passed email: {}.", email);
+        if (StringUtils.isBlank(email)) {
+            log.error("Email should not be blank.");
+            throw new InvalidCredentialsException();
+        }
+        if (StringUtils.isBlank(command.password())) {
+            log.error("Password passed by {} should not be blank.", email);
             throw new InvalidCredentialsException();
         }
         if (studentRepository.existsByEmail(email)) {

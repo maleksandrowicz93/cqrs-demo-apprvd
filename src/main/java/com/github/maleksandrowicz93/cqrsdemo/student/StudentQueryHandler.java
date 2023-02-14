@@ -4,7 +4,8 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 
-@Log4j2
+@Slf4j
 @Component
+@FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 class StudentQueryHandler {
 
-    final StudentRepository studentRepository;
-    final StudentMapper studentMapper;
+    StudentRepository studentRepository;
+    StudentMapper studentMapper;
 
     List<StudentIdentification> findAllStudents(int page, int size) {
         return studentRepository.findAll(getPageRequest(page, size))
