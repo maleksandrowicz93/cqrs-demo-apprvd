@@ -1,5 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.PasswordNotUpdatedException
@@ -152,6 +154,27 @@ class StudentFacadeSpec extends Specification {
         def student = facade.editStudentData(id, Students.SECOND.saveStudentRequest())
 
         then: "data is successfully edited"
+        student == expectedStudent
+    }
+
+    def "edit student only with updated data"() {
+        given: "a student exists in db"
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def id = studentEntity.id()
+
+        and: "there is a new email to update the current one"
+        def newEmail = Students.SECOND.saveStudentRequest().email()
+        def newStudentData = SaveStudentRequest.builder()
+                .email(newEmail)
+                .build()
+
+        when: "user tries to edit student's data with this email"
+        def student = facade.editStudentData(id, newStudentData)
+
+        then: "only student's email should be changed"
+        def expectedStudent = Students.FIRST.studentDto(id).toBuilder()
+                .email(newEmail)
+                .build()
         student == expectedStudent
     }
 
