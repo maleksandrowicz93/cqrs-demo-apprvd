@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: cqrs demo - OpenAPI 3.0
   description: This is a cqrs demo application API based on the OpenAPI 3.0 specification.
-  termsOfService: https://github.com/maleksandrowicz93/cqrs-demo
+  termsOfService: https://github.com/maleksandrowicz93/cqrs-demo-apprvd
   contact:
     name: Contact the Developer
     url: https://www.linkedin.com/in/mateusz-aleksandrowicz/
