@@ -27,25 +27,27 @@ class EditStudentDataCommandHandler {
             log.error("Not found student with id: {}", studentId);
             throw new StudentNotFoundException();
         }
-        var studentBuilder = Student.builder().id(studentId);
+        var student = studentRepository.findById(studentId)
+                .orElseThrow(() -> {
+                    log.error("Not found student with id: {}", studentId);
+                    throw new StudentNotFoundException();
+                });
         if (StringUtils.isNotBlank(command.email())) {
-            studentBuilder.email(command.email());
+            student.email(command.email());
         }
         if (StringUtils.isNotBlank(command.password())) {
-            studentBuilder.password(command.password());
+            var encodedPassword = passwordEncoder.encode(student.password());
+            student.password(encodedPassword);
         }
         if (StringUtils.isNotBlank(command.firstName())) {
-            studentBuilder.firstName(command.firstName());
+            student.firstName(command.firstName());
         }
         if (StringUtils.isNotBlank(command.lastName())) {
-            studentBuilder.lastName(command.lastName());
+            student.lastName(command.lastName());
         }
         if (command.birthDate() != null) {
-            studentBuilder.birthDate(command.birthDate());
+            student.birthDate(command.birthDate());
         }
-        var student = studentBuilder.build();
-        var encodedPassword = passwordEncoder.encode(student.password());
-        student.password(encodedPassword);
         var savedStudent = studentRepository.save(student);
         return studentMapper.toStudentDto(savedStudent);
     }
