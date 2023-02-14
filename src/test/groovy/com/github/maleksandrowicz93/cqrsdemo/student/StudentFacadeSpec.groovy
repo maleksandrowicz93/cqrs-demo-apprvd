@@ -204,17 +204,6 @@ class StudentFacadeSpec extends Specification {
         thrown(StudentNotFoundException)
     }
 
-    def "should not update password when no change"() {
-        given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
-
-        when: "user tries to update a student's password with the same value"
-        facade.updatePassword(student.id(), Students.FIRST.saveStudentRequest().password())
-
-        then: "PasswordNotUpdatedException is thrown"
-        thrown(PasswordNotUpdatedException)
-    }
-
     def "delete student"() {
         given: "a student exists in db"
         def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())

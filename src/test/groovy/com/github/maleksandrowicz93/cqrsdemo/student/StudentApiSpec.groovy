@@ -1,7 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.ErrorMessage
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.PasswordNotUpdatedException
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -14,7 +13,6 @@ import spock.lang.Specification
 import static org.hamcrest.Matchers.hasSize
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -208,7 +206,7 @@ class StudentApiSpec extends Specification {
         def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         expect: "this student should have updated password at PATCH /student/{id}"
-        mockMvc.perform(patch("/student/" + student.id() + "/password")
+        mockMvc.perform(put("/student/" + student.id() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Students.SECOND.saveStudentRequest().password()))
                 .andDo(print())
@@ -219,7 +217,7 @@ class StudentApiSpec extends Specification {
     def "should not update password when student not exist"() {
         expect: "for cleared db, a student's password should not be updated at PATCH /student/{id}"
         def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
-        mockMvc.perform(patch("/student/" + UUID.randomUUID() + "/password")
+        mockMvc.perform(put("/student/" + UUID.randomUUID() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Students.SECOND.saveStudentRequest().password()))
                 .andDo(print())
@@ -235,25 +233,9 @@ class StudentApiSpec extends Specification {
 
         expect: "his password should not be updated at PATCH /student/{id}"
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
-        mockMvc.perform(patch("/student/" + student.id() + "/password")
+        mockMvc.perform(put("/student/" + student.id() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(' '))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
-    }
-
-    def "should not update password when no change"() {
-        given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
-
-        expect: "his password should not be updated at PATCH /student/{id}"
-        def errorMessage = ErrorMessage.PASSWORD_NOT_UPDATED
-        mockMvc.perform(patch("/student/" + student.id() + "/password")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(Students.FIRST.saveStudentRequest().password()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
