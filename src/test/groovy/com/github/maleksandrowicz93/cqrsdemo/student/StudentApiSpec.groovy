@@ -208,7 +208,7 @@ class StudentApiSpec extends Specification {
         expect: "this student should have updated password at PATCH /student/{id}"
         mockMvc.perform(put("/student/" + student.id() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Students.SECOND.saveStudentRequest().password()))
+                .content(Students.SECOND.password))
                 .andDo(print())
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath('$').doesNotExist())
@@ -219,7 +219,7 @@ class StudentApiSpec extends Specification {
         def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
         mockMvc.perform(put("/student/" + UUID.randomUUID() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(Students.SECOND.saveStudentRequest().password()))
+                .content(Students.SECOND.password))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath('$').isNotEmpty())
@@ -235,7 +235,7 @@ class StudentApiSpec extends Specification {
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(put("/student/" + student.id() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(' '))
+                .content(" "))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())

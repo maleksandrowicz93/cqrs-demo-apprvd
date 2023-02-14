@@ -1,10 +1,8 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.PasswordNotUpdatedException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -163,7 +161,7 @@ class StudentFacadeSpec extends Specification {
         def id = studentEntity.id()
 
         and: "there is a new email to update the current one"
-        def newEmail = Students.SECOND.saveStudentRequest().email()
+        def newEmail = Students.SECOND.email
         def newStudentData = SaveStudentRequest.builder()
                 .email(newEmail)
                 .build()
@@ -191,7 +189,7 @@ class StudentFacadeSpec extends Specification {
         def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
 
         and: "there is a new password to update the current one"
-        def newPassword = Students.SECOND.saveStudentRequest().password()
+        def newPassword = Students.SECOND.password
 
         expect: "his password can be successfully updated"
         facade.updatePassword(studentEntity.id(), newPassword)
@@ -221,7 +219,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not update password when student not exist"() {
         when: "user tries to update a student's password in empty db"
-        facade.updatePassword(UUID.randomUUID(), "NEW_PASSWORD")
+        facade.updatePassword(UUID.randomUUID(), Students.SECOND.password)
 
         then: "StudentNotFoundException is thrown"
         thrown(StudentNotFoundException)

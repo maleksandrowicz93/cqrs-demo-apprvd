@@ -3,11 +3,13 @@ package com.github.maleksandrowicz93.cqrsdemo.student
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
+import lombok.Getter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import java.time.LocalDate
 import java.time.Month
 
+@Getter
 enum Students implements StudentUtils {
 
     FIRST(
@@ -25,7 +27,7 @@ enum Students implements StudentUtils {
             LocalDate.of(2000, Month.JANUARY, 1)
     )
 
-    final passwordEncoder = new BCryptPasswordEncoder()
+    private final passwordEncoder = new BCryptPasswordEncoder()
 
     final String email
     final String firstName
