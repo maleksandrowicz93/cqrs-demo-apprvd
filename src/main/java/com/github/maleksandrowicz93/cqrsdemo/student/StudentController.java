@@ -33,8 +33,9 @@ class StudentController implements StudentApi {
 
     @Override
     public ResponseEntity<StudentDto> findStudent(UUID id) {
-        StudentDto student = studentFacade.getStudent(id);
-        return ResponseEntity.ok(student);
+        return studentFacade.getStudent(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
@@ -131,15 +132,15 @@ class StudentFacadeSpec extends Specification {
         def student = facade.getStudent(id)
 
         then: "gets his correct data"
-        student == expectedStudent
+        student.get() == expectedStudent
     }
 
     def "should not get student when not exist"() {
         when: "user tries to retrieve a student from empty db"
-        facade.getStudent(UUID.randomUUID())
+        def student = facade.getStudent(UUID.randomUUID())
 
         then: "StudentNotFoundException is thrown"
-        thrown(StudentNotFoundException)
+        student.isEmpty()
     }
 
     def "edit student"() {

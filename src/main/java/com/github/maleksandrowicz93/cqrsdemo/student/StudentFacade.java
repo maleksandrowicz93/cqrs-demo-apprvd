@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @FieldDefaults(makeFinal = true)
@@ -27,7 +28,7 @@ public class StudentFacade {
         return addStudentCommandHandler.handle(command);
     }
 
-    public StudentDto getStudent(UUID studentId) {
+    public Optional<StudentDto> getStudent(UUID studentId) {
         return studentQueryHandler.findStudentById(studentId);
     }
 

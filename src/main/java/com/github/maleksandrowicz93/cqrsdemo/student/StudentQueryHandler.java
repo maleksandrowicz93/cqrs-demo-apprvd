@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -37,12 +38,8 @@ class StudentQueryHandler {
         ));
     }
 
-    StudentDto findStudentById(UUID studentId) {
+    Optional<StudentDto> findStudentById(UUID studentId) {
         return studentRepository.findById(studentId)
-                .map(studentMapper::toStudentDto)
-                .orElseThrow(() -> {
-                    log.error("Not found student with id: {}", studentId);
-                    throw new StudentNotFoundException();
-                });
+                .map(studentMapper::toStudentDto);
     }
 }

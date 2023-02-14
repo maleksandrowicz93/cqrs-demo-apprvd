@@ -155,13 +155,10 @@ class StudentApiSpec extends Specification {
 
     def "should not get student when not exist"() {
         expect: "for cleared db, a student should not be retrieved from GET /student/{id}"
-        def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
         mockMvc.perform(get("/student/" + UUID.randomUUID()))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$').doesNotExist())
     }
 
     def "edit student"() {
