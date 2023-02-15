@@ -36,8 +36,8 @@ public class StudentFacade {
         return editstudentDataCommandHandler.handle(studentId, saveStudentRequest);
     }
 
-    public void updatePassword(UUID studentId, String password) {
-        updatePasswordCommandHandler.handle(studentId, password);
+    public Optional<StudentIdentification> updatePassword(UUID studentId, String password) {
+        return updatePasswordCommandHandler.handle(studentId, password);
     }
 
     public void deleteStudent(UUID studentId) {

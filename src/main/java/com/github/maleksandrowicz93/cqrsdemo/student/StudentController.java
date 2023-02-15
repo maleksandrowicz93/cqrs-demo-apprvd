@@ -46,9 +46,10 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<Void> updatePassword(UUID id, String body) {
-        studentFacade.updatePassword(id, body);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<StudentIdentification> updatePassword(UUID id, String body) {
+        return studentFacade.updatePassword(id, body)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override

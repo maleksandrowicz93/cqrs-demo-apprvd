@@ -112,7 +112,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/StudentDto'
         '404':
-          description: Student not found.
+          $ref: '#/components/responses/404NotFound'
         '500':
           $ref: '#/components/responses/500InternalServerError'
     put:
@@ -145,7 +145,7 @@ paths:
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
-          description: Student not found.
+          $ref: '#/components/responses/404NotFound'
         '500':
           $ref: '#/components/responses/500InternalServerError'
     delete:
@@ -191,8 +191,12 @@ paths:
               format: password
               example: password123
       responses:
-        '204':
-          description: Student's password updated successfully.
+        '200':
+          description: Identification of student with already updated password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentIdentification'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -208,11 +212,7 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     404NotFound:
-      description: Not Found error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+      description: Student not found.
     500InternalServerError:
       description: Unknown error
       content:

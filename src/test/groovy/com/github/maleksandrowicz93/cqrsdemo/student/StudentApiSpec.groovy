@@ -225,21 +225,20 @@ class StudentApiSpec extends Specification {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Students.SECOND.password))
                 .andDo(print())
-                .andExpect(status().isNoContent())
-                .andExpect(jsonPath('$').doesNotExist())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('$').isNotEmpty())
+                .andExpect(jsonPath('\$.id').value(student.id().toString()))
+                .andExpect(jsonPath('\$.email').value(student.email()))
     }
 
     def "should not update password when student not exist"() {
         expect: "for cleared db, a student's password should not be updated at PATCH /student/{id}"
-        def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
         mockMvc.perform(put("/student/" + UUID.randomUUID() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(Students.SECOND.password))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$').doesNotExist())
     }
 
     def "should not update password when invalid"() {

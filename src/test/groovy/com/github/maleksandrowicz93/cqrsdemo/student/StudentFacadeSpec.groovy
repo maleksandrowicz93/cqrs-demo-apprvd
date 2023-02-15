@@ -1,11 +1,9 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
+
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -225,12 +223,16 @@ class StudentFacadeSpec extends Specification {
     def "update password"() {
         given: "a student exists in db"
         def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def expectedStudent = Students.FIRST.studentIdentification(studentEntity.id())
 
         and: "there is a new password to update the current one"
         def newPassword = Students.SECOND.password
 
-        expect: "his password can be successfully updated"
-        facade.updatePassword(studentEntity.id(), newPassword)
+        when: "user tries to update password"
+        def student = facade.updatePassword(studentEntity.id(), newPassword)
+
+        then: "identification of student with updated password is returned"
+        student.get() == expectedStudent
     }
 
     def "should not update password when no password"() {
@@ -257,10 +259,10 @@ class StudentFacadeSpec extends Specification {
 
     def "should not update password when student not exist"() {
         when: "user tries to update a student's password in empty db"
-        facade.updatePassword(UUID.randomUUID(), Students.SECOND.password)
+        def student = facade.updatePassword(UUID.randomUUID(), Students.SECOND.password)
 
-        then: "StudentNotFoundException is thrown"
-        thrown(StudentNotFoundException)
+        then: "no updated user is return"
+        student.isEmpty()
     }
 
     def "delete student"() {
