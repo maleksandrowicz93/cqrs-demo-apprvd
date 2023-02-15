@@ -53,10 +53,10 @@ class StudentApiSpec extends Specification {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isArray())
                 .andExpect(jsonPath('$', hasSize(2)))
-                .andExpect(jsonPath('\$[0].id').value(sortedStudents.get(0).id().toString()))
-                .andExpect(jsonPath('\$[1].id').value(sortedStudents.get(1).id().toString()))
-                .andExpect(jsonPath('\$[0].email').value(sortedStudents.get(0).email()))
-                .andExpect(jsonPath('\$[1].email').value(sortedStudents.get(1).email()))
+                .andExpect(jsonPath('$[0].id').value(sortedStudents.get(0).id().toString()))
+                .andExpect(jsonPath('$[1].id').value(sortedStudents.get(1).id().toString()))
+                .andExpect(jsonPath('$[0].email').value(sortedStudents.get(0).email()))
+                .andExpect(jsonPath('$[1].email').value(sortedStudents.get(1).email()))
     }
 
     def "get students number limited to page size"() {
@@ -95,11 +95,11 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.id').isString())
-                .andExpect(jsonPath('\$.email').value(request.email()))
-                .andExpect(jsonPath('\$.firstName').value(request.firstName()))
-                .andExpect(jsonPath('\$.lastName').value(request.lastName()))
-                .andExpect(jsonPath('\$.birthDate').value(request.birthDate().toString()))
+                .andExpect(jsonPath('$.id').isString())
+                .andExpect(jsonPath('$.email').value(request.email()))
+                .andExpect(jsonPath('$.firstName').value(request.firstName()))
+                .andExpect(jsonPath('$.lastName').value(request.lastName()))
+                .andExpect(jsonPath('$.birthDate').value(request.birthDate().toString()))
                 .andReturn()
 
         and: "there should be correctly created Location header"
@@ -147,8 +147,8 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$.code').value(errorMessage.name()))
+                .andExpect(jsonPath('$.message').value(errorMessage.message()))
     }
 
     def "get student"() {
@@ -160,11 +160,11 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.id').value(student.id().toString()))
-                .andExpect(jsonPath('\$.email').value(student.email()))
-                .andExpect(jsonPath('\$.firstName').value(student.firstName()))
-                .andExpect(jsonPath('\$.lastName').value(student.lastName()))
-                .andExpect(jsonPath('\$.birthDate').value(student.birthDate().toString()))
+                .andExpect(jsonPath('$.id').value(student.id().toString()))
+                .andExpect(jsonPath('$.email').value(student.email()))
+                .andExpect(jsonPath('$.firstName').value(student.firstName()))
+                .andExpect(jsonPath('$.lastName').value(student.lastName()))
+                .andExpect(jsonPath('$.birthDate').value(student.birthDate().toString()))
     }
 
     def "should not get student when not exist"() {
@@ -189,11 +189,11 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.id').value(student.id().toString()))
-                .andExpect(jsonPath('\$.email').value(request.email()))
-                .andExpect(jsonPath('\$.firstName').value(request.firstName()))
-                .andExpect(jsonPath('\$.lastName').value(request.lastName()))
-                .andExpect(jsonPath('\$.birthDate').value(request.birthDate().toString()))
+                .andExpect(jsonPath('$.id').value(student.id().toString()))
+                .andExpect(jsonPath('$.email').value(request.email()))
+                .andExpect(jsonPath('$.firstName').value(request.firstName()))
+                .andExpect(jsonPath('$.lastName').value(request.lastName()))
+                .andExpect(jsonPath('$.birthDate').value(request.birthDate().toString()))
     }
 
     def "should not edit student when not exist"() {
@@ -227,8 +227,8 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$.code').value(errorMessage.name()))
+                .andExpect(jsonPath('$.message').value(errorMessage.message()))
     }
 
     def "update password"() {
@@ -242,8 +242,8 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.id').value(student.id().toString()))
-                .andExpect(jsonPath('\$.email').value(student.email()))
+                .andExpect(jsonPath('$.id').value(student.id().toString()))
+                .andExpect(jsonPath('$.email').value(student.email()))
     }
 
     def "should not update password when student not exist"() {
@@ -268,8 +268,8 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$.code').value(errorMessage.name()))
+                .andExpect(jsonPath('$.message').value(errorMessage.message()))
     }
 
     def "delete student"() {
