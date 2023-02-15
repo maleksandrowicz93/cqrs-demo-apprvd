@@ -32,8 +32,7 @@ class StudentApiSpec extends Specification {
     StudentRepository studentRepository
 
     def setup() {
-        studentRepository.findAll()
-                .forEach(student -> studentRepository.deleteById(student.id()))
+        StudentUtils.cleanRepository(studentRepository)
     }
 
     def "get all students"() {

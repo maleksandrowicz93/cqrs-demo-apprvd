@@ -1,13 +1,19 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 
-interface StudentUtils {
+import org.springframework.data.domain.PageRequest
 
-    SaveStudentRequest saveStudentRequest()
-    StudentIdentification studentIdentification(UUID id)
-    StudentDto studentDto(UUID id)
-    Student studentToAdd()
+class StudentUtils {
+
+    static final PageRequest PAGE_REQUEST = PageRequest.of(0, 10)
+
+    private StudentUtils() {}
+
+    static def cleanRepository(StudentRepository studentRepository) {
+        def pageNumber = studentRepository.findAll(PAGE_REQUEST).getTotalPages()
+        for (i in 0..<pageNumber) {
+            studentRepository.findAll(PAGE_REQUEST).getContent()
+                    .forEach(student -> studentRepository.deleteById(student.id()))
+        }
+    }
 }

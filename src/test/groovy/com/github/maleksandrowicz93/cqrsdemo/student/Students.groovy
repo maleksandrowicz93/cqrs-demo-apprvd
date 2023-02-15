@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.Month
 
 @Getter
-enum Students implements StudentUtils {
+enum Students implements StudentFactory {
 
     FIRST(
             "john.paul@gmail.com",

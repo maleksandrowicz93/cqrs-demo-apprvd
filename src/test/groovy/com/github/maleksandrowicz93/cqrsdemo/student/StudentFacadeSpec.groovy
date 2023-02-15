@@ -7,7 +7,6 @@ import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExi
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
@@ -21,12 +20,7 @@ class StudentFacadeSpec extends Specification {
     StudentFacade facade
 
     def setup() {
-        def pageRequest = PageRequest.of(0, 10)
-        def pageNumber = studentRepository.findAll(pageRequest).getTotalPages()
-        for (i in 0..<pageNumber) {
-            studentRepository.findAll(pageRequest).getContent()
-                    .forEach(student -> studentRepository.deleteById(student.id()))
-        }
+        StudentUtils.cleanRepository(studentRepository)
     }
 
     def "get all students"() {
@@ -242,7 +236,7 @@ class StudentFacadeSpec extends Specification {
         studentRepository.save(Students.SECOND.studentToAdd())
 
         and: "number of all students is known"
-        def pageRequest = PageRequest.of(0, 10)
+        def pageRequest = StudentUtils.PAGE_REQUEST
         def expected = studentRepository.findAll(pageRequest).getTotalElements()
 
         when: "user tries to delete not existing student"
