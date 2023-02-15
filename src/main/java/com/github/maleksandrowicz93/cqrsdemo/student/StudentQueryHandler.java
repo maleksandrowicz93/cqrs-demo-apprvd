@@ -19,11 +19,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class StudentQueryHandler {
 
-    StudentRepository studentRepository;
+    StudentQueryRepository studentQueryRepository;
     StudentMapper studentMapper;
 
     List<StudentIdentification> findAllStudents(int page, int size) {
-        return studentRepository.findAll(getPageRequest(page, size))
+        return studentQueryRepository.findAll(getPageRequest(page, size))
                 .getContent().stream()
                 .map(studentMapper::toStudentIdentification)
                 .toList();
@@ -38,11 +38,11 @@ class StudentQueryHandler {
     }
 
     Optional<StudentDto> findStudentById(UUID studentId) {
-        return studentRepository.findById(studentId)
+        return studentQueryRepository.findById(studentId)
                 .map(studentMapper::toStudentDto);
     }
 
     UUID findStudentIdByEmail(String email) {
-        return studentRepository.findStudentIdByEmail(email);
+        return studentQueryRepository.findStudentIdByEmail(email);
     }
 }

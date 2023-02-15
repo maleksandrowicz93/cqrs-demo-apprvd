@@ -18,7 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class UpdatePasswordCommandHandler {
 
-    StudentRepository studentRepository;
+    StudentWriteRepository studentWriteRepository;
     PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
 
@@ -27,9 +27,9 @@ class UpdatePasswordCommandHandler {
             log.error("Password passed by student with id {} should not be blank.", studentId);
             throw new InvalidCredentialsException();
         }
-        return studentRepository.findById(studentId)
+        return studentWriteRepository.findById(studentId)
                 .map(student -> student.password(passwordEncoder.encode(password)))
-                .map(studentRepository::save)
+                .map(studentWriteRepository::save)
                 .map(studentMapper::toStudentIdentification);
     }
 }

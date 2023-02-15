@@ -13,18 +13,20 @@ import spock.lang.Specification
 class StudentFacadeSpec extends Specification {
 
     @Autowired
-    StudentRepository studentRepository
-    @Autowired
     StudentFacade facade
+    @Autowired
+    StudentQueryRepository studentQueryRepository;
+    @Autowired
+    StudentWriteRepository studentWriteRepository
 
     def setup() {
-        StudentUtils.cleanRepository(studentRepository)
+        StudentUtils.cleanRepository(studentQueryRepository, studentWriteRepository)
     }
 
     def "get all students"() {
         given: "2 students exist in db"
-        def firstStudent = studentRepository.save(Students.FIRST.studentToAdd())
-        def secondStudent = studentRepository.save(Students.SECOND.studentToAdd())
+        def firstStudent = studentWriteRepository.save(Students.FIRST.studentToAdd())
+        def secondStudent = studentWriteRepository.save(Students.SECOND.studentToAdd())
         def expectedStudents = List.of(Students.FIRST.studentIdentification(firstStudent.id()),
                 Students.SECOND.studentIdentification(secondStudent.id()))
 
@@ -52,7 +54,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when already exists"() {
         given: "student exists in db"
-        studentRepository.save(Students.FIRST.studentToAdd())
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to add this student"
         def student = facade.addStudent(Students.FIRST.saveStudentRequest())
@@ -115,7 +117,7 @@ class StudentFacadeSpec extends Specification {
 
     def "get student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
         def id = studentEntity.id()
         def expectedStudent = Students.FIRST.studentDto(id)
 
@@ -136,7 +138,7 @@ class StudentFacadeSpec extends Specification {
 
     def "edit student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
         def id = studentEntity.id()
         def expectedStudent = Students.SECOND.studentDto(id)
 
@@ -157,7 +159,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not edit student when no email"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "user fill data to update with no email"
         def request = Students.SECOND.saveStudentRequest().toBuilder()
@@ -173,7 +175,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not edit student when empty email"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "user fill data to update with empty email"
         def request = Students.SECOND.saveStudentRequest().toBuilder()
@@ -189,7 +191,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not edit student when no password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "user fill data to update with no password"
         def request = Students.SECOND.saveStudentRequest().toBuilder()
@@ -205,7 +207,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not edit student when empty password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "user fill data to update with empty password"
         def request = Students.SECOND.saveStudentRequest().toBuilder()
@@ -221,7 +223,7 @@ class StudentFacadeSpec extends Specification {
 
     def "update password"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
         def expectedStudent = Students.FIRST.studentIdentification(studentEntity.id())
 
         and: "there is a new password to update the current one"
@@ -236,7 +238,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not update password when no password"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to update a student's password"
         facade.updatePassword(student.id(), null)
@@ -247,7 +249,7 @@ class StudentFacadeSpec extends Specification {
 
     def "should not update password when empty password"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to update a student's password"
         facade.updatePassword(student.id(), " ")
@@ -266,29 +268,29 @@ class StudentFacadeSpec extends Specification {
 
     def "delete student"() {
         given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+        def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to delete delete that student"
         facade.deleteStudent(studentEntity.id())
 
         then: "his account should be successfully deleted"
-        studentRepository.findById(studentEntity.id()).isEmpty()
+        studentWriteRepository.findById(studentEntity.id()).isEmpty()
     }
 
     def "should not delete any student when the one to be deleted not exist"() {
         given: "few students exist in db"
-        studentRepository.save(Students.FIRST.studentToAdd())
-        studentRepository.save(Students.SECOND.studentToAdd())
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
+        studentWriteRepository.save(Students.SECOND.studentToAdd())
 
         and: "number of all students is known"
         def pageRequest = StudentUtils.PAGE_REQUEST
-        def expected = studentRepository.findAll(pageRequest).getTotalElements()
+        def expected = studentWriteRepository.findAll(pageRequest).getTotalElements()
 
         when: "user tries to delete not existing student"
         facade.deleteStudent(UUID.randomUUID())
 
         then: "no deletion should be called on db"
-        def currentStudentsNumber = studentRepository.findAll(pageRequest).getTotalElements()
+        def currentStudentsNumber = studentWriteRepository.findAll(pageRequest).getTotalElements()
         currentStudentsNumber == expected
     }
 }

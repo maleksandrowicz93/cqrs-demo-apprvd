@@ -19,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class EditStudentDataCommandHandler {
 
-    StudentRepository studentRepository;
+    StudentWriteRepository studentWriteRepository;
     PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
 
@@ -33,14 +33,14 @@ class EditStudentDataCommandHandler {
             log.error("Password passed by {} should not be blank.", email);
             throw new InvalidCredentialsException();
         }
-        if (!studentRepository.existsById(studentId)) {
+        if (!studentWriteRepository.existsById(studentId)) {
             return Optional.empty();
         }
         var student = studentMapper.toStudent(saveStudentRequest);
         student.id(studentId);
         var encodedPassword = passwordEncoder.encode(student.password());
         student.password(encodedPassword);
-        var savedStudent = studentRepository.save(student);
+        var savedStudent = studentWriteRepository.save(student);
         var studentDto = studentMapper.toStudentDto(savedStudent);
         return Optional.of(studentDto);
     }

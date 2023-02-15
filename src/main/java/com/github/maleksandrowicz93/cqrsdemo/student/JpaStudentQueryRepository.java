@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-interface JpaStudentRepository extends JpaRepository<Student, UUID>, StudentRepository {
+interface JpaStudentQueryRepository extends JpaRepository<Student, UUID>, StudentQueryRepository {
 }

@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class AddStudentCommandHandler {
 
-    StudentRepository studentRepository;
+    StudentWriteRepository studentWriteRepository;
     PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
 
@@ -32,13 +32,13 @@ class AddStudentCommandHandler {
             log.error("Password passed by {} should not be blank.", email);
             throw new InvalidCredentialsException();
         }
-        if (studentRepository.existsByEmail(email)) {
+        if (studentWriteRepository.existsByEmail(email)) {
             return Optional.empty();
         }
         var student = studentMapper.toStudent(saveStudentRequest);
         var encodedPassword = passwordEncoder.encode(student.password());
         student.password(encodedPassword);
-        var savedStudent = studentRepository.save(student);
+        var savedStudent = studentWriteRepository.save(student);
         StudentDto studentDto = studentMapper.toStudentDto(savedStudent);
         return Optional.of(studentDto);
     }

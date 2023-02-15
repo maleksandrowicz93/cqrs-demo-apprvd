@@ -9,11 +9,11 @@ class StudentUtils {
 
     private StudentUtils() {}
 
-    static def cleanRepository(StudentRepository studentRepository) {
-        def pageNumber = studentRepository.findAll(PAGE_REQUEST).getTotalPages()
+    static def cleanRepository(StudentQueryRepository queryRepository, StudentWriteRepository writeRepository) {
+        def pageNumber = queryRepository.findAll(PAGE_REQUEST).getTotalPages()
         for (i in 0..<pageNumber) {
-            studentRepository.findAll(PAGE_REQUEST).getContent()
-                    .forEach(student -> studentRepository.deleteById(student.id()))
+            queryRepository.findAll(PAGE_REQUEST).getContent()
+                    .forEach(student -> writeRepository.deleteById(student.id()))
         }
     }
 }

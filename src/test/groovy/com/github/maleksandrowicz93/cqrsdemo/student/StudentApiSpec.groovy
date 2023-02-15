@@ -31,16 +31,18 @@ class StudentApiSpec extends Specification {
     @Autowired
     Gson gson
     @Autowired
-    StudentRepository studentRepository
+    StudentQueryRepository studentQueryRepository
+    @Autowired
+    StudentWriteRepository studentWriteRepository
 
     def setup() {
-        StudentUtils.cleanRepository(studentRepository)
+        StudentUtils.cleanRepository(studentQueryRepository, studentWriteRepository)
     }
 
     def "get all students"() {
         given: "2 students exist in db"
-        def firstStudent = studentRepository.save(Students.FIRST.studentToAdd())
-        def secondStudent = studentRepository.save(Students.SECOND.studentToAdd())
+        def firstStudent = studentWriteRepository.save(Students.FIRST.studentToAdd())
+        def secondStudent = studentWriteRepository.save(Students.SECOND.studentToAdd())
         def sortedStudents = List.of(firstStudent, secondStudent).stream()
                 .sorted(Comparator.comparing((Student s) -> s.lastName()))
                 .toList()
@@ -59,8 +61,8 @@ class StudentApiSpec extends Specification {
 
     def "get students number limited to page size"() {
         given: "2 students exist in db"
-        studentRepository.save(Students.FIRST.studentToAdd())
-        studentRepository.save(Students.SECOND.studentToAdd())
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
+        studentWriteRepository.save(Students.SECOND.studentToAdd())
 
         and: "size of page is equal to 1"
         int size = 1
@@ -109,7 +111,7 @@ class StudentApiSpec extends Specification {
 
     def "should not add student when already exists"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "his data is ready to be added second time"
         def request = Students.FIRST.saveStudentRequest()
@@ -126,7 +128,7 @@ class StudentApiSpec extends Specification {
         and: "there should be correctly created Location header"
         def response = result.getResponse()
         def location = response.getHeader(HttpHeaders.LOCATION)
-        def id = studentRepository.findStudentIdByEmail(student.email())
+        def id = studentQueryRepository.findStudentIdByEmail(student.email())
         location.contains("student/" + id)
     }
 
@@ -151,7 +153,7 @@ class StudentApiSpec extends Specification {
 
     def "get student"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         expect: "this student should be retrieved from GET /student/{id}"
         mockMvc.perform(get("/student/" + student.id()))
@@ -175,7 +177,7 @@ class StudentApiSpec extends Specification {
 
     def "edit student"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data for this student update is prepared"
         def request = Students.SECOND.saveStudentRequest()
@@ -209,7 +211,7 @@ class StudentApiSpec extends Specification {
 
     def "should not edit student when invalid credentials"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data with invalid credentials for this student is prepared"
         def request = Students.SECOND.saveStudentRequest().toBuilder()
@@ -231,7 +233,7 @@ class StudentApiSpec extends Specification {
 
     def "update password"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         expect: "this student should have updated password at PATCH /student/{id}"
         mockMvc.perform(put("/student/" + student.id() + "/password")
@@ -256,7 +258,7 @@ class StudentApiSpec extends Specification {
 
     def "should not update password when invalid"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         expect: "his password should not be updated at PATCH /student/{id}"
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
@@ -272,7 +274,7 @@ class StudentApiSpec extends Specification {
 
     def "delete student"() {
         given: "a student exists in db"
-        def student = studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         expect: "this student can be deleted at DELETE /student/{id}"
         mockMvc.perform(delete("/student/" + student.id()))
