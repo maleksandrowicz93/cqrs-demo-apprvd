@@ -1,10 +1,12 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.ErrorMessage
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -85,36 +87,47 @@ class StudentApiSpec extends Specification {
         def request = Students.FIRST.saveStudentRequest()
 
         expect: "this student should be successfully added at POST /student"
-        mockMvc.perform(post("/student")
+        def result = mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(request)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath('$').isNotEmpty())
                 .andExpect(jsonPath('\$.id').isString())
                 .andExpect(jsonPath('\$.email').value(request.email()))
                 .andExpect(jsonPath('\$.firstName').value(request.firstName()))
                 .andExpect(jsonPath('\$.lastName').value(request.lastName()))
                 .andExpect(jsonPath('\$.birthDate').value(request.birthDate().toString()))
+                .andReturn()
+
+        and: "there should be correctly created Location header"
+        def response = result.getResponse()
+        def location = response.getHeader(HttpHeaders.LOCATION)
+        def body = gson.fromJson(response.getContentAsString(), StudentDto)
+        location.contains("student/" + body.id())
     }
 
     def "should not add student when already exists"() {
         given: "a student exists in db"
-        studentRepository.save(Students.FIRST.studentToAdd())
+        def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         and: "his data is ready to be added second time"
         def request = Students.FIRST.saveStudentRequest()
 
         expect: "this student should not be added again at POST /student"
-        def errorMessage = ErrorMessage.STUDENT_ALREADY_EXISTS
-        mockMvc.perform(post("/student")
+        def result = mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(request)))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath('$').doesNotExist())
+                .andReturn()
+
+        and: "there should be correctly created Location header"
+        def response = result.getResponse()
+        def location = response.getHeader(HttpHeaders.LOCATION)
+        def id = studentRepository.findStudentIdByEmail(student.email())
+        location.contains("student/" + id)
     }
 
     def "should not add new student when invalid credentials"() {

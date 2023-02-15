@@ -3,7 +3,6 @@ package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -47,8 +46,8 @@ class StudentFacadeSpec extends Specification {
         def student = facade.addStudent(Students.FIRST.saveStudentRequest())
 
         then: "this student should be successfully added"
-        def expectedStudent = Students.FIRST.studentDto(student.id())
-        student == expectedStudent
+        def expectedStudent = Students.FIRST.studentDto(student.get().id())
+        student.get() == expectedStudent
     }
 
     def "should not add student when already exists"() {
@@ -56,10 +55,10 @@ class StudentFacadeSpec extends Specification {
         studentRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to add this student"
-        facade.addStudent(Students.FIRST.saveStudentRequest())
+        def student = facade.addStudent(Students.FIRST.saveStudentRequest())
 
-        then: "StudentAlreadyExistsException is thrown"
-        thrown(StudentAlreadyExistsException)
+        then: "no student should be created"
+        student.isEmpty()
     }
 
     def "should not add student when no email"() {

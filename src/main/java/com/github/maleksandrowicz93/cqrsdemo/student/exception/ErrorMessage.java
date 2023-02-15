@@ -10,7 +10,6 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RequiredArgsConstructor
 public enum ErrorMessage {
 
-    STUDENT_ALREADY_EXISTS("Cannot add student because already exists.", BAD_REQUEST),
     INVALID_CREDENTIALS("Username or password is invalid.", BAD_REQUEST),
     UNKNOWN_ERROR("Unknown error.", INTERNAL_SERVER_ERROR);
 

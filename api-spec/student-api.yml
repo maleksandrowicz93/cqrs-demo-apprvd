@@ -44,12 +44,14 @@ paths:
             schema:
               $ref: '#/components/schemas/SaveStudentRequest'
       responses:
-        '200':
+        '201':
           description: Added student's data
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
+        '409':
+          $ref: '#/components/responses/409Conflict'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '500':
@@ -213,6 +215,8 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     404NotFound:
       description: Student not found.
+    409Conflict:
+      description: Student already exists.
     500InternalServerError:
       description: Unknown error
       content:

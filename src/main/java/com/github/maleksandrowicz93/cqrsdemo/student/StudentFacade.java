@@ -24,7 +24,7 @@ public class StudentFacade {
         return studentQueryHandler.findAllStudents(page, size);
     }
 
-    public StudentDto addStudent(SaveStudentRequest saveStudentRequest) {
+    public Optional<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
         return addStudentCommandHandler.handle(saveStudentRequest);
     }
 
@@ -42,5 +42,9 @@ public class StudentFacade {
 
     public void deleteStudent(UUID studentId) {
         deleteStudentCommandHandler.handle(studentId);
+    }
+
+    public UUID findStudentIdByEmail(String email) {
+        return studentQueryHandler.findStudentIdByEmail(email);
     }
 }
