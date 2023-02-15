@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RequiredArgsConstructor
 public enum ErrorMessage {
 
+    //TODO: handle i18n
     INVALID_CREDENTIALS("Username or password is invalid.", BAD_REQUEST),
     UNKNOWN_ERROR("Unknown error.", INTERNAL_SERVER_ERROR);
 
