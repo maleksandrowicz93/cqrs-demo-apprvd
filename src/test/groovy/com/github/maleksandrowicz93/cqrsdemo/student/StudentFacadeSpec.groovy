@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
@@ -132,7 +133,7 @@ class StudentFacadeSpec extends Specification {
         when: "user tries to retrieve a student from empty db"
         def student = facade.getStudent(UUID.randomUUID())
 
-        then: "StudentNotFoundException is thrown"
+        then: "no student should be get"
         student.isEmpty()
     }
 
@@ -146,36 +147,79 @@ class StudentFacadeSpec extends Specification {
         def student = facade.editStudentData(id, Students.SECOND.saveStudentRequest())
 
         then: "data is successfully edited"
-        student == expectedStudent
-    }
-
-    def "edit student only with updated data"() {
-        given: "a student exists in db"
-        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
-        def id = studentEntity.id()
-
-        and: "there is a new email to update the current one"
-        def newEmail = Students.SECOND.email
-        def newStudentData = SaveStudentRequest.builder()
-                .email(newEmail)
-                .build()
-
-        when: "user tries to edit student's data with this email"
-        def student = facade.editStudentData(id, newStudentData)
-
-        then: "only student's email should be changed"
-        def expectedStudent = Students.FIRST.studentDto(id).toBuilder()
-                .email(newEmail)
-                .build()
-        student == expectedStudent
+        student.get() == expectedStudent
     }
 
     def "should not edit student when not exist"() {
         when: "user tries to edit a student in empty db"
-        facade.editStudentData(UUID.randomUUID(), Students.FIRST.saveStudentRequest())
+        def student = facade.editStudentData(UUID.randomUUID(), Students.FIRST.saveStudentRequest())
 
-        then: "StudentNotFoundException is thrown"
-        thrown(StudentNotFoundException)
+        then: "no updated data should be get"
+        student.isEmpty()
+    }
+
+    def "should not edit student when no email"() {
+        given: "a student exists in db"
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+
+        and: "user fill data to update with no email"
+        def request = Students.SECOND.saveStudentRequest().toBuilder()
+                .email(null)
+                .build()
+
+        when: "user tries to edit student's data"
+        facade.editStudentData(studentEntity.id(), request)
+
+        then: "InvalidCredentialsException is thrown"
+        thrown(InvalidCredentialsException)
+    }
+
+    def "should not edit student when empty email"() {
+        given: "a student exists in db"
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+
+        and: "user fill data to update with empty email"
+        def request = Students.SECOND.saveStudentRequest().toBuilder()
+                .email(" ")
+                .build()
+
+        when: "user tries to edit student's data"
+        facade.editStudentData(studentEntity.id(), request)
+
+        then: "InvalidCredentialsException is thrown"
+        thrown(InvalidCredentialsException)
+    }
+
+    def "should not edit student when no password"() {
+        given: "a student exists in db"
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+
+        and: "user fill data to update with no password"
+        def request = Students.SECOND.saveStudentRequest().toBuilder()
+                .password(null)
+                .build()
+
+        when: "user tries to edit student's data"
+        facade.editStudentData(studentEntity.id(), request)
+
+        then: "InvalidCredentialsException is thrown"
+        thrown(InvalidCredentialsException)
+    }
+
+    def "should not edit student when empty password"() {
+        given: "a student exists in db"
+        def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
+
+        and: "user fill data to update with empty password"
+        def request = Students.SECOND.saveStudentRequest().toBuilder()
+                .password(" ")
+                .build()
+
+        when: "user tries to edit student's data"
+        facade.editStudentData(studentEntity.id(), request)
+
+        then: "InvalidCredentialsException is thrown"
+        thrown(InvalidCredentialsException)
     }
 
     def "update password"() {

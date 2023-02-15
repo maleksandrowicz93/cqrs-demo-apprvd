@@ -40,8 +40,9 @@ class StudentController implements StudentApi {
 
     @Override
     public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentCommand) {
-        StudentDto student = studentFacade.editStudentData(id, saveStudentCommand);
-        return ResponseEntity.ok(student);
+        return studentFacade.editStudentData(id, saveStudentCommand)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override

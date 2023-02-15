@@ -145,7 +145,7 @@ paths:
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'
+          description: Student not found.
         '500':
           $ref: '#/components/responses/500InternalServerError'
     delete:

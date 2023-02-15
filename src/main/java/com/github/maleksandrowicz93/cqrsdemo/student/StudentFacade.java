@@ -32,7 +32,7 @@ public class StudentFacade {
         return studentQueryHandler.findStudentById(studentId);
     }
 
-    public StudentDto editStudentData(UUID studentId, SaveStudentRequest command) {
+    public Optional<StudentDto> editStudentData(UUID studentId, SaveStudentRequest command) {
         return editstudentDataCommandHandler.handle(studentId, command);
     }
 

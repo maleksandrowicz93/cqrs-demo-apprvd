@@ -186,12 +186,31 @@ class StudentApiSpec extends Specification {
         def command = Students.SECOND.saveStudentRequest()
 
         expect: "for cleared db, a student's data should not be edited at PUT /student/{id}"
-        def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
         mockMvc.perform(put("/student/" + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(command)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
+                .andExpect(jsonPath('$').doesNotExist())
+    }
+
+    def "should not edit student when invalid credentials"() {
+        given: "a student exists in db"
+        def student = studentRepository.save(Students.FIRST.studentToAdd())
+
+        and: "new data with invalid credentials for this student is prepared"
+        def command = Students.SECOND.saveStudentRequest().toBuilder()
+                .email(null)
+                .password(null)
+                .build()
+
+        expect: "this student should not be be added at POST /student"
+        def errorMessage = ErrorMessage.INVALID_CREDENTIALS
+        mockMvc.perform(put("/student/" + student.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(command)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
                 .andExpect(jsonPath('\$.code').value(errorMessage.name()))
                 .andExpect(jsonPath('\$.message').value(errorMessage.message()))
