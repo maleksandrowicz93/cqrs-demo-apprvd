@@ -165,7 +165,7 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '204':
-          description: Student's account data edited successfully.
+          description: Student's account data edited successfully
         '500':
           $ref: '#/components/responses/500InternalServerError'
   /student/{id}/password:
@@ -194,7 +194,7 @@ paths:
               example: password123
       responses:
         '200':
-          description: Identification of student with already updated password.
+          description: Identification of student with already updated password
           content:
             application/json:
               schema:
@@ -214,9 +214,9 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     404NotFound:
-      description: Student not found.
+      description: Student not found
     409Conflict:
-      description: Student already exists.
+      description: Student already exists
     500InternalServerError:
       description: Unknown error
       content:
