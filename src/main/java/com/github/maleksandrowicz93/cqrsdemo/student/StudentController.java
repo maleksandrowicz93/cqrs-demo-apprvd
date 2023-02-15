@@ -26,8 +26,8 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentCommand) {
-        StudentDto student = studentFacade.addStudent(saveStudentCommand);
+    public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
+        StudentDto student = studentFacade.addStudent(saveStudentRequest);
         return ResponseEntity.ok(student);
     }
 
@@ -39,8 +39,8 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentCommand) {
-        return studentFacade.editStudentData(id, saveStudentCommand)
+    public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
+        return studentFacade.editStudentData(id, saveStudentRequest)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

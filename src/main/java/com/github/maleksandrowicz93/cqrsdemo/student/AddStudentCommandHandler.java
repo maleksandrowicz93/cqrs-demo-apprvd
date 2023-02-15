@@ -21,13 +21,13 @@ class AddStudentCommandHandler {
     PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
 
-    StudentDto handle(SaveStudentRequest command) {
-        var email = command.email();
+    StudentDto handle(SaveStudentRequest saveStudentRequest) {
+        var email = saveStudentRequest.email();
         if (StringUtils.isBlank(email)) {
             log.error("Email should not be blank.");
             throw new InvalidCredentialsException();
         }
-        if (StringUtils.isBlank(command.password())) {
+        if (StringUtils.isBlank(saveStudentRequest.password())) {
             log.error("Password passed by {} should not be blank.", email);
             throw new InvalidCredentialsException();
         }
@@ -35,7 +35,7 @@ class AddStudentCommandHandler {
             log.error("Student with email {} already exists", email);
             throw new StudentAlreadyExistsException();
         }
-        var student = studentMapper.toStudent(command);
+        var student = studentMapper.toStudent(saveStudentRequest);
         var encodedPassword = passwordEncoder.encode(student.password());
         student.password(encodedPassword);
         var savedStudent = studentRepository.save(student);

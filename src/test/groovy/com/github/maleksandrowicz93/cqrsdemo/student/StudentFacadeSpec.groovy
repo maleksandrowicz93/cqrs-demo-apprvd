@@ -66,12 +66,12 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no email"() {
         given: "a new student data with no email"
-        def command = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.saveStudentRequest().toBuilder()
                 .email(null)
                 .build()
 
         when: "user tries to add this student"
-        facade.addStudent(command)
+        facade.addStudent(request)
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
@@ -79,12 +79,12 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty email"() {
         given: "a new student data with empty email"
-        def command = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.saveStudentRequest().toBuilder()
                 .email(" ")
                 .build()
 
         when: "user tries to add this student"
-        facade.addStudent(command)
+        facade.addStudent(request)
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
@@ -92,12 +92,12 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when no password"() {
         given: "a new student data with no password"
-        def command = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.saveStudentRequest().toBuilder()
                 .password(null)
                 .build()
 
         when: "user tries to add this student"
-        facade.addStudent(command)
+        facade.addStudent(request)
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)
@@ -105,12 +105,12 @@ class StudentFacadeSpec extends Specification {
 
     def "should not add student when empty password"() {
         given: "a new student data with empty password"
-        def command = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.saveStudentRequest().toBuilder()
                 .password(" ")
                 .build()
 
         when: "user tries to add this student"
-        facade.addStudent(command)
+        facade.addStudent(request)
 
         then: "InvalidCredentialsException is thrown"
         thrown(InvalidCredentialsException)

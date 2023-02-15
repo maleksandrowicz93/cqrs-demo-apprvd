@@ -24,16 +24,16 @@ public class StudentFacade {
         return studentQueryHandler.findAllStudents(page, size);
     }
 
-    public StudentDto addStudent(SaveStudentRequest command) {
-        return addStudentCommandHandler.handle(command);
+    public StudentDto addStudent(SaveStudentRequest saveStudentRequest) {
+        return addStudentCommandHandler.handle(saveStudentRequest);
     }
 
     public Optional<StudentDto> getStudent(UUID studentId) {
         return studentQueryHandler.findStudentById(studentId);
     }
 
-    public Optional<StudentDto> editStudentData(UUID studentId, SaveStudentRequest command) {
-        return editstudentDataCommandHandler.handle(studentId, command);
+    public Optional<StudentDto> editStudentData(UUID studentId, SaveStudentRequest saveStudentRequest) {
+        return editstudentDataCommandHandler.handle(studentId, saveStudentRequest);
     }
 
     public void updatePassword(UUID studentId, String password) {

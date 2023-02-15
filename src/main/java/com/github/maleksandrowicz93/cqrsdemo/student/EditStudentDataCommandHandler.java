@@ -23,20 +23,20 @@ class EditStudentDataCommandHandler {
     PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
 
-    Optional<StudentDto> handle(UUID studentId, SaveStudentRequest command) {
-        var email = command.email();
+    Optional<StudentDto> handle(UUID studentId, SaveStudentRequest saveStudentRequest) {
+        var email = saveStudentRequest.email();
         if (StringUtils.isBlank(email)) {
             log.error("Email should not be blank.");
             throw new InvalidCredentialsException();
         }
-        if (StringUtils.isBlank(command.password())) {
+        if (StringUtils.isBlank(saveStudentRequest.password())) {
             log.error("Password passed by {} should not be blank.", email);
             throw new InvalidCredentialsException();
         }
         if (!studentRepository.existsById(studentId)) {
             return Optional.empty();
         }
-        var student = studentMapper.toStudent(command);
+        var student = studentMapper.toStudent(saveStudentRequest);
         student.id(studentId);
         var encodedPassword = passwordEncoder.encode(student.password());
         student.password(encodedPassword);

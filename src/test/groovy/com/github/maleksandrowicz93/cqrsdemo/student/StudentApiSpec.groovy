@@ -82,20 +82,20 @@ class StudentApiSpec extends Specification {
 
     def "add new student"() {
         given: "completely new student's data"
-        def command = Students.FIRST.saveStudentRequest()
+        def request = Students.FIRST.saveStudentRequest()
 
         expect: "this student should be successfully added at POST /student"
         mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
                 .andExpect(jsonPath('\$.id').isString())
-                .andExpect(jsonPath('\$.email').value(command.email()))
-                .andExpect(jsonPath('\$.firstName').value(command.firstName()))
-                .andExpect(jsonPath('\$.lastName').value(command.lastName()))
-                .andExpect(jsonPath('\$.birthDate').value(command.birthDate().toString()))
+                .andExpect(jsonPath('\$.email').value(request.email()))
+                .andExpect(jsonPath('\$.firstName').value(request.firstName()))
+                .andExpect(jsonPath('\$.lastName').value(request.lastName()))
+                .andExpect(jsonPath('\$.birthDate').value(request.birthDate().toString()))
     }
 
     def "should not add student when already exists"() {
@@ -103,13 +103,13 @@ class StudentApiSpec extends Specification {
         studentRepository.save(Students.FIRST.studentToAdd())
 
         and: "his data is ready to be added second time"
-        def command = Students.FIRST.saveStudentRequest()
+        def request = Students.FIRST.saveStudentRequest()
 
         expect: "this student should not be added again at POST /student"
         def errorMessage = ErrorMessage.STUDENT_ALREADY_EXISTS
         mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
@@ -119,7 +119,7 @@ class StudentApiSpec extends Specification {
 
     def "should not add new student when invalid credentials"() {
         given: "completely new student's data"
-        def command = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.saveStudentRequest().toBuilder()
                 .email(null)
                 .password(null)
                 .build()
@@ -128,7 +128,7 @@ class StudentApiSpec extends Specification {
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
@@ -165,30 +165,30 @@ class StudentApiSpec extends Specification {
         def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data for this student update is prepared"
-        def command = Students.SECOND.saveStudentRequest()
+        def request = Students.SECOND.saveStudentRequest()
 
         expect: "this student's data should be edited at PUT /student/{id}"
         mockMvc.perform(put("/student/" + student.id())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
                 .andExpect(jsonPath('\$.id').value(student.id().toString()))
-                .andExpect(jsonPath('\$.email').value(command.email()))
-                .andExpect(jsonPath('\$.firstName').value(command.firstName()))
-                .andExpect(jsonPath('\$.lastName').value(command.lastName()))
-                .andExpect(jsonPath('\$.birthDate').value(command.birthDate().toString()))
+                .andExpect(jsonPath('\$.email').value(request.email()))
+                .andExpect(jsonPath('\$.firstName').value(request.firstName()))
+                .andExpect(jsonPath('\$.lastName').value(request.lastName()))
+                .andExpect(jsonPath('\$.birthDate').value(request.birthDate().toString()))
     }
 
     def "should not edit student when not exist"() {
         given: "a student update data is ready"
-        def command = Students.SECOND.saveStudentRequest()
+        def request = Students.SECOND.saveStudentRequest()
 
         expect: "for cleared db, a student's data should not be edited at PUT /student/{id}"
         mockMvc.perform(put("/student/" + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath('$').doesNotExist())
@@ -199,7 +199,7 @@ class StudentApiSpec extends Specification {
         def student = studentRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data with invalid credentials for this student is prepared"
-        def command = Students.SECOND.saveStudentRequest().toBuilder()
+        def request = Students.SECOND.saveStudentRequest().toBuilder()
                 .email(null)
                 .password(null)
                 .build()
@@ -208,7 +208,7 @@ class StudentApiSpec extends Specification {
         def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(put("/student/" + student.id())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(command)))
+                .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('$').isNotEmpty())
