@@ -164,8 +164,6 @@ paths:
       responses:
         '200':
           description: Student's account data edited successfully.
-        '404':
-          $ref: '#/components/responses/404NotFound'
         '500':
           $ref: '#/components/responses/500InternalServerError'
   /student/{id}/password:

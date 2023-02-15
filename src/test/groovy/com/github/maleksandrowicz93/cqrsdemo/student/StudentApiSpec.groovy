@@ -251,14 +251,11 @@ class StudentApiSpec extends Specification {
                 .andExpect(jsonPath('$').doesNotExist())
     }
 
-    def "should not delete student when not exist"() {
-        expect: "for cleared db, a student should not be deleted at DELETE /student/{id}"
-        def errorMessage = ErrorMessage.STUDENT_NOT_FOUND
+    def "deleting not existing student should return success status"() {
+        expect: "for cleared db, status of student deletion at DELETE /student/{id} should be 204"
         mockMvc.perform(delete("/student/" + UUID.randomUUID()))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('\$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('\$.message').value(errorMessage.message()))
+                .andExpect(status().isNoContent())
+                .andExpect(jsonPath('$').doesNotExist())
     }
 }

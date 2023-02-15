@@ -1,6 +1,5 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +17,7 @@ class DeleteStudentCommandHandler {
 
     void handle(UUID studentId) {
         if (!studentRepository.existsById(studentId)) {
-            log.error("Not found student with id: {}", studentId);
-            throw new StudentNotFoundException();
+            return;
         }
         studentRepository.deleteById(studentId);
     }

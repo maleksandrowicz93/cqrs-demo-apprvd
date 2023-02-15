@@ -1,7 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.InvalidCredentialsException
 import com.github.maleksandrowicz93.cqrsdemo.student.exception.StudentAlreadyExistsException
@@ -230,15 +229,27 @@ class StudentFacadeSpec extends Specification {
         given: "a student exists in db"
         def studentEntity = studentRepository.save(Students.FIRST.studentToAdd())
 
-        expect: "his account can be successfully deleted"
+        when: "user tries to delete delete that student"
         facade.deleteStudent(studentEntity.id())
+
+        then: "his account should be successfully deleted"
+        studentRepository.findById(studentEntity.id()).isEmpty()
     }
 
-    def "should not delete student when not exist"() {
-        when: "user tries to delete a student from empty db"
+    def "should not delete any student when the one to be deleted not exist"() {
+        given: "few students exist in db"
+        studentRepository.save(Students.FIRST.studentToAdd())
+        studentRepository.save(Students.SECOND.studentToAdd())
+
+        and: "number of all students is known"
+        def pageRequest = PageRequest.of(0, 10)
+        def expected = studentRepository.findAll(pageRequest).getTotalElements()
+
+        when: "user tries to delete not existing student"
         facade.deleteStudent(UUID.randomUUID())
 
-        then: "StudentNotFoundException is thrown"
-        thrown(StudentNotFoundException)
+        then: "no deletion should be called on db"
+        def currentStudentsNumber = studentRepository.findAll(pageRequest).getTotalElements()
+        currentStudentsNumber == expected
     }
 }
