@@ -35,11 +35,10 @@ class AddStudentCommandHandler {
         if (studentWriteRepository.existsByEmail(email)) {
             return Optional.empty();
         }
-        var student = studentMapper.toStudent(saveStudentRequest);
-        var encodedPassword = passwordEncoder.encode(student.password());
-        student.password(encodedPassword);
+        var student = studentMapper.toStudent(saveStudentRequest)
+                .password(passwordEncoder.encode(saveStudentRequest.password()));
         var savedStudent = studentWriteRepository.save(student);
-        StudentDto studentDto = studentMapper.toStudentDto(savedStudent);
+        var studentDto = studentMapper.toStudentDto(savedStudent);
         return Optional.of(studentDto);
     }
 }
