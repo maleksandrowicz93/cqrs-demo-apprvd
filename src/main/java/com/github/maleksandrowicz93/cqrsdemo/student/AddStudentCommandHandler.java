@@ -2,6 +2,9 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.result.CommandHandlerResult;
+import com.github.maleksandrowicz93.cqrsdemo.student.result.ResultCode;
+import com.github.maleksandrowicz93.cqrsdemo.student.result.ResultProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;

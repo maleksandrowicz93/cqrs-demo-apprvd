@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student;
+package com.github.maleksandrowicz93.cqrsdemo.student.result;
 
 import lombok.AccessLevel;
 import lombok.Builder;

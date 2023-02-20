@@ -4,6 +4,8 @@ import com.github.maleksandrowicz93.cqrsdemo.student.api.StudentApi;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
+import com.github.maleksandrowicz93.cqrsdemo.student.result.ResultCode;
+import com.github.maleksandrowicz93.cqrsdemo.student.result.ResultProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpHeaders;
