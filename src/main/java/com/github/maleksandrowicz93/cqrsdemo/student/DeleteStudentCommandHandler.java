@@ -16,9 +16,8 @@ class DeleteStudentCommandHandler {
     StudentWriteRepository studentWriteRepository;
 
     void handle(UUID studentId) {
-        if (!studentWriteRepository.existsById(studentId)) {
-            return;
+        if (studentWriteRepository.existsById(studentId)) {
+            studentWriteRepository.deleteById(studentId);
         }
-        studentWriteRepository.deleteById(studentId);
     }
 }
