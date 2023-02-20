@@ -21,17 +21,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class StudentController implements StudentApi {
 
-    StudentFacade studentFacade;
+    StudentQueryFacade studentQueryFacade;
+    StudentWriteFacade studentWriteFacade;
 
     @Override
     public ResponseEntity<List<StudentIdentification>> findAllStudents(Integer page, Integer size) {
-        List<StudentIdentification> students = studentFacade.getAllStudents(page, size);
+        List<StudentIdentification> students = studentQueryFacade.getAllStudents(page, size);
         return ResponseEntity.ok(students);
     }
 
     @Override
     public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
-        return studentFacade.addStudent(saveStudentRequest)
+        return studentWriteFacade.addStudent(saveStudentRequest)
                 .map(student -> {
                     String location = getLocation(student.id());
                     return ResponseEntity
@@ -39,7 +40,7 @@ class StudentController implements StudentApi {
                             .body(student);
                 })
                 .orElseGet(() -> {
-                    var id = studentFacade.findStudentIdByEmail(saveStudentRequest.email());
+                    var id = studentQueryFacade.findStudentIdByEmail(saveStudentRequest.email());
                     return ResponseEntity
                             .status(HttpStatus.CONFLICT)
                             .header(HttpHeaders.LOCATION, getLocation(id))
@@ -55,28 +56,28 @@ class StudentController implements StudentApi {
 
     @Override
     public ResponseEntity<StudentDto> findStudent(UUID id) {
-        return studentFacade.getStudent(id)
+        return studentQueryFacade.getStudent(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
     public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
-        return studentFacade.editStudentData(id, saveStudentRequest)
+        return studentWriteFacade.editStudentData(id, saveStudentRequest)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
     public ResponseEntity<StudentIdentification> updatePassword(UUID id, String body) {
-        return studentFacade.updatePassword(id, body)
+        return studentWriteFacade.updatePassword(id, body)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
     public ResponseEntity<Void> deleteStudent(UUID id) {
-        studentFacade.deleteStudent(id);
+        studentWriteFacade.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
 }
