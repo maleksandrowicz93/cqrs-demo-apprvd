@@ -22,8 +22,4 @@ public class StudentQueryFacade {
     public Optional<StudentDto> getStudent(UUID studentId) {
         return studentQueryHandler.findStudentById(studentId);
     }
-
-    public UUID findStudentIdByEmail(String email) {
-        return studentQueryHandler.findStudentIdByEmail(email);
-    }
 }

@@ -108,7 +108,7 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Found student's data
+          description: Student's data
           content:
             application/json:
               schema:
@@ -139,7 +139,7 @@ paths:
               $ref: '#/components/schemas/SaveStudentRequest'
       responses:
         '200':
-          description: Added student's data
+          description: Edited student's data
           content:
             application/json:
               schema:
@@ -208,21 +208,13 @@ paths:
 components:
   responses:
     400BadRequest:
-      description: Bad Request error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+      description: Invalid credentials
     404NotFound:
       description: Student not found
     409Conflict:
       description: Student already exists
     500InternalServerError:
       description: Unknown error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     StudentIdentificationList:
       description: List of students
@@ -287,13 +279,3 @@ components:
           example: password123
       allOf:
         - $ref: '#/components/schemas/BasicStudentData'
-    ErrorResponse:
-      description: Model representing response in case of any exception thrown in application
-      type: object
-      properties:
-        code:
-          type: string
-          example: INTERNAL_SERVER_ERROR
-        message:
-          type: string
-          example: Unknown error.

@@ -1,7 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
-import com.github.maleksandrowicz93.cqrsdemo.student.exception.ErrorMessage
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -129,7 +128,7 @@ class StudentApiSpec extends Specification {
         def response = result.getResponse()
         def location = response.getHeader(HttpHeaders.LOCATION)
         def id = studentQueryRepository.findStudentIdByEmail(student.email())
-        location.contains("student/" + id)
+        location.contains("student/" + id.get())
     }
 
     def "should not add new student when invalid credentials"() {
@@ -140,15 +139,12 @@ class StudentApiSpec extends Specification {
                 .build()
 
         expect: "this student should not be be added at POST /student"
-        def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(post("/student")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$').doesNotExist())
     }
 
     def "get student"() {
@@ -220,15 +216,12 @@ class StudentApiSpec extends Specification {
                 .build()
 
         expect: "this student should not be be added at POST /student"
-        def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(put("/student/" + student.id())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(request)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$').doesNotExist())
     }
 
     def "update password"() {
@@ -261,15 +254,12 @@ class StudentApiSpec extends Specification {
         def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         expect: "his password should not be updated at PATCH /student/{id}"
-        def errorMessage = ErrorMessage.INVALID_CREDENTIALS
         mockMvc.perform(put("/student/" + student.id() + "/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(" "))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.code').value(errorMessage.name()))
-                .andExpect(jsonPath('$.message').value(errorMessage.message()))
+                .andExpect(jsonPath('$').doesNotExist())
     }
 
     def "delete student"() {

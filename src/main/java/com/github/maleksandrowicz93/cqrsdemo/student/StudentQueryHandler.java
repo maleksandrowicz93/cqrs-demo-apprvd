@@ -41,8 +41,4 @@ class StudentQueryHandler {
         return studentQueryRepository.findById(studentId)
                 .map(studentMapper::toStudentDto);
     }
-
-    UUID findStudentIdByEmail(String email) {
-        return studentQueryRepository.findStudentIdByEmail(email);
-    }
 }

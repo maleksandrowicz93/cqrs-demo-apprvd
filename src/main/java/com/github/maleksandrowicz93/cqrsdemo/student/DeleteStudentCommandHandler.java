@@ -13,10 +13,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class DeleteStudentCommandHandler {
 
+    StudentQueryRepository studentQueryRepository;
     StudentWriteRepository studentWriteRepository;
 
     void handle(UUID studentId) {
-        if (studentWriteRepository.existsById(studentId)) {
+        if (studentQueryRepository.existsById(studentId)) {
             studentWriteRepository.deleteById(studentId);
         }
     }
