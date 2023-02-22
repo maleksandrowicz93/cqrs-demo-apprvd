@@ -11,11 +11,14 @@
     <groupId>com.github.maleksandrowicz93</groupId>
     <artifactId>cqrs-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cqrs-demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>cqrs demo</name>
+    <description>Demo project showing cqrs with hexagonal architecture</description>
     <properties>
         <java.version>17</java.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <spockframework.version>2.3-groovy-4.0</spockframework.version>
+        <artifact.package>${project.groupId}.cqrsdemo</artifact.package>
+        <student.package>${artifact.package}.student</student.package>
     </properties>
 
     <dependencies>
@@ -91,13 +94,13 @@
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>2.3-groovy-4.0</version>
+            <version>${spockframework.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-spring</artifactId>
-            <version>2.3-groovy-4.0</version>
+            <version>${spockframework.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -157,27 +160,20 @@
                         <configuration>
                             <inputSpec>api-spec/student-api.yml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <packageName>${project.groupId}.cqrsdemo.student</packageName>
-                            <apiPackage>${project.groupId}.cqrsdemo.student.api</apiPackage>
-                            <modelPackage>${project.groupId}.cqrsdemo.student.dto</modelPackage>
-                            <generateModelDocumentation>false</generateModelDocumentation>
-                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <templateDirectory>${project.basedir}/templates</templateDirectory>
                             <configOptions>
-                                <basePackage>${project.groupId}</basePackage>
-                                <invokerPackage>${project.groupId}</invokerPackage>
-                                <configPackage>${project.groupId}.api.configuration</configPackage>
+                                <title>${project.artifactId}</title>
+                                <basePackage>${student.package}</basePackage>
+                                <apiPackage>${student.package}.api</apiPackage>
+                                <modelPackage>${student.package}.dto</modelPackage>
+                                <configPackage>${student.package}.configuration</configPackage>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
-                                <useOptional>true</useOptional>
-                                <swaggerDocketConfig>false</swaggerDocketConfig>
                                 <useBeanValidation>true</useBeanValidation>
                                 <performBeanValidation>true</performBeanValidation>
-                                <skipDeafulInterface>true</skipDeafulInterface>
-                                <unhandledException>true</unhandledException>
                                 <useTags>true</useTags>
-                                <title>${project.name}</title>
-                                <additionalModelTypeAnnotations>@lombok.Value @lombok.Builder(toBuilder = true)
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Value @lombok.Builder(toBuilder = true)
                                 </additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
