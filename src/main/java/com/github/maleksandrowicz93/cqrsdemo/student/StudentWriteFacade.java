@@ -6,9 +6,11 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
 import com.github.maleksandrowicz93.cqrsdemo.student.result.CommandHandlerResult;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 @FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
 public class StudentWriteFacade {

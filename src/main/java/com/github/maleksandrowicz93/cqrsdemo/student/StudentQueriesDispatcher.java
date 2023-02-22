@@ -17,12 +17,12 @@ import java.util.UUID;
 @Component
 @FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
-class StudentQueryHandler {
+public class StudentQueriesDispatcher {
 
     StudentQueryRepository studentQueryRepository;
     StudentMapper studentMapper;
 
-    List<StudentIdentification> findAllStudents(int page, int size) {
+    public List<StudentIdentification> findAllStudents(int page, int size) {
         return studentQueryRepository.findAll(getPageRequest(page, size))
                 .getContent().stream()
                 .map(studentMapper::toStudentIdentification)
@@ -37,7 +37,7 @@ class StudentQueryHandler {
         ));
     }
 
-    Optional<StudentDto> findStudentById(UUID studentId) {
+    public Optional<StudentDto> findStudentById(UUID studentId) {
         return studentQueryRepository.findById(studentId)
                 .map(studentMapper::toStudentDto);
     }

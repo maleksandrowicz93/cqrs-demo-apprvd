@@ -5,27 +5,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Value
-@Builder
+@Builder(access = AccessLevel.PACKAGE)
 public class CommandHandlerResult<T> {
 
     @Getter(AccessLevel.NONE)
     T value;
     ResultCode code;
     @Getter(AccessLevel.NONE)
-    Map<ResultProperty, String> properties = new HashMap<>();
+    Map<ResultProperty, String> properties;
 
     public Optional<T> value() {
         return Optional.ofNullable(value);
-    }
-
-    public CommandHandlerResult<T> property(ResultProperty resultProperty, String value) {
-        properties.put(resultProperty, value);
-        return this;
     }
 
     public String property(ResultProperty resultProperty) {

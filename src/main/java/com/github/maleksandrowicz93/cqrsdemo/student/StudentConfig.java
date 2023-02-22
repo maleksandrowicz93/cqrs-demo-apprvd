@@ -9,24 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class StudentConfig {
 
     @Bean
-    StudentQueryFacade studentQueryFacade(StudentQueryHandler studentQueryHandler) {
-        return new StudentQueryFacade(studentQueryHandler);
-    }
-
-    @Bean
-    StudentWriteFacade studentWriteFacade(
-            AddStudentCommandHandler addStudentCommandHandler,
-            EditStudentDataCommandHandler editStudentDataCommandHandler,
-            UpdatePasswordCommandHandler updatePasswordCommandHandler,
-            DeleteStudentCommandHandler deleteStudentCommandHandler
-    ) {
-        return new StudentWriteFacade(addStudentCommandHandler,
-                editStudentDataCommandHandler,
-                updatePasswordCommandHandler,
-                deleteStudentCommandHandler);
-    }
-
-    @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 11);
     }

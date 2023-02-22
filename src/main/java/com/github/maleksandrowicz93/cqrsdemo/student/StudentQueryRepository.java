@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.interfaces.QueryRepository;
+import com.github.maleksandrowicz93.cqrsdemo.student.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

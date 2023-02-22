@@ -8,10 +8,10 @@ import spock.lang.Specification
 
 @SpringBootTest
 @ContextConfiguration
-class StudentQueryFacadeSpec extends Specification {
+class StudentQueriesDispatcherSpec extends Specification {
 
     @Autowired
-    StudentQueryFacade facade
+    StudentQueriesDispatcher dispatcher
     @Autowired
     StudentQueryRepository studentQueryRepository;
     @Autowired
@@ -29,7 +29,7 @@ class StudentQueryFacadeSpec extends Specification {
                 Students.SECOND.studentIdentification(secondStudent.id()))
 
         when: "user tries to retrieve them"
-        def students = facade.getAllStudents(0, 10)
+        def students = dispatcher.findAllStudents(0, 10)
 
         then: "gets exactly these students and no more"
         students.size() == 2
@@ -38,7 +38,7 @@ class StudentQueryFacadeSpec extends Specification {
 
     def "get empty student list when no student exists"() {
         expect: "list of students retrieved from empty db is empty"
-        facade.getAllStudents(0, 10).size() == 0
+        dispatcher.findAllStudents(0, 10).size() == 0
     }
 
     def "get student"() {
@@ -48,7 +48,7 @@ class StudentQueryFacadeSpec extends Specification {
         def expectedStudent = Students.FIRST.studentDto(id)
 
         when: "user tries to retrieve student's data by student's id"
-        def student = facade.getStudent(id)
+        def student = dispatcher.findStudentById(id)
 
         then: "gets his correct data"
         student.get() == expectedStudent
@@ -56,7 +56,7 @@ class StudentQueryFacadeSpec extends Specification {
 
     def "should not get student when not exist"() {
         when: "user tries to retrieve a student from empty db"
-        def student = facade.getStudent(UUID.randomUUID())
+        def student = dispatcher.findStudentById(UUID.randomUUID())
 
         then: "no student should be get"
         student.isEmpty()
