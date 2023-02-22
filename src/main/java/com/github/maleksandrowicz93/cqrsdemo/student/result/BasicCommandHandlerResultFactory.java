@@ -2,7 +2,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student.result;
 
 import java.util.Map;
 
-public abstract class BasicCommandHandlerResultFactory<T> implements CommandHandlerResultFactory<T> {
+abstract class BasicCommandHandlerResultFactory<T> implements CommandHandlerResultFactory<T> {
 
     @Override
     public CommandHandlerResult<T> create(T value, ResultCode code) {

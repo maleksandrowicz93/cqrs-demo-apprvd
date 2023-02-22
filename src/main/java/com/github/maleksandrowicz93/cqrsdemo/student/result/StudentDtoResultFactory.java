@@ -4,5 +4,5 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StudentDtoResultFactory extends BasicCommandHandlerResultFactory<StudentDto> {
+class StudentDtoResultFactory extends BasicCommandHandlerResultFactory<StudentDto> {
 }
