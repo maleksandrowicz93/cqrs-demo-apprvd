@@ -1,7 +1,9 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;

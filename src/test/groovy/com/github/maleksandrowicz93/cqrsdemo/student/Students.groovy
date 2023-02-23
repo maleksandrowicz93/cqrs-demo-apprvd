@@ -1,8 +1,9 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student
 import lombok.Getter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 

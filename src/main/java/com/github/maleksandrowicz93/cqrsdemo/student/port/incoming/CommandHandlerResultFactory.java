@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.result;
+package com.github.maleksandrowicz93.cqrsdemo.student.port.incoming;
 
 import java.util.Map;
 

@@ -1,6 +1,8 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration

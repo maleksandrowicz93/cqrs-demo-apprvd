@@ -1,9 +1,12 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
-import com.github.maleksandrowicz93.cqrsdemo.student.result.CommandHandlerResult;
-import com.github.maleksandrowicz93.cqrsdemo.student.result.CommandHandlerResultFactory;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandlerResult;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandlerResultFactory;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static com.github.maleksandrowicz93.cqrsdemo.student.result.ResultCode.INVALID_CREDENTIALS;
-import static com.github.maleksandrowicz93.cqrsdemo.student.result.ResultCode.OK;
-import static com.github.maleksandrowicz93.cqrsdemo.student.result.ResultCode.STUDENT_NOT_FOUND;
+import static com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultCode.INVALID_CREDENTIALS;
+import static com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultCode.OK;
+import static com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultCode.STUDENT_NOT_FOUND;
 
 @Slf4j
 @Component

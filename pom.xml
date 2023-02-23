@@ -164,9 +164,8 @@
                             <configOptions>
                                 <title>${project.artifactId}</title>
                                 <basePackage>${student.package}</basePackage>
-                                <apiPackage>${student.package}.api</apiPackage>
-                                <modelPackage>${student.package}.dto</modelPackage>
-                                <configPackage>${student.package}.configuration</configPackage>
+                                <apiPackage>${student.package}.port.incoming</apiPackage>
+                                <modelPackage>${student.package}.port.incoming</modelPackage>
                                 <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useBeanValidation>true</useBeanValidation>

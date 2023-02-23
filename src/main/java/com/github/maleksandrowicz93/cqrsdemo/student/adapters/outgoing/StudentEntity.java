@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapters.outgoing;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,14 +16,14 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "student")
 @ToString
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class Student {
+class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

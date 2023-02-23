@@ -1,6 +1,5 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.result;
+package com.github.maleksandrowicz93.cqrsdemo.student.port.incoming;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
 import org.springframework.stereotype.Component;
 
 @Component

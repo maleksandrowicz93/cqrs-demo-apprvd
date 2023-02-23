@@ -1,12 +1,12 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.infrastructure;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapters.incoming;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.StudentQueriesDispatcher;
 import com.github.maleksandrowicz93.cqrsdemo.student.StudentWriteFacade;
-import com.github.maleksandrowicz93.cqrsdemo.student.api.StudentApi;
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto;
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
-import com.github.maleksandrowicz93.cqrsdemo.student.result.CommandHandlerResult;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandlerResult;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentApi;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.env.Environment;
@@ -18,7 +18,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.maleksandrowicz93.cqrsdemo.student.result.ResultProperty.CONFLICTED_ID;
+import static com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultProperty.CONFLICTED_ID;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpStatus.CONFLICT;
 

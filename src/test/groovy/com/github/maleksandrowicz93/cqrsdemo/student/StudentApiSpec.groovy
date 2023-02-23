@@ -1,6 +1,9 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository
 import com.google.gson.Gson
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
