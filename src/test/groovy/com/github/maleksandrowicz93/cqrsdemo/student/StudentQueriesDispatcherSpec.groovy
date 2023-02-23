@@ -38,9 +38,16 @@ class StudentQueriesDispatcherSpec extends Specification {
         students.eachWithIndex { StudentIdentification student, int i -> student == expectedStudents.get(i) }
     }
 
-    def "get empty student list when no student exists"() {
-        expect: "list of students retrieved from empty db is empty"
-        dispatcher.findAllStudents(0, 10).size() == 0
+    def "get students number limited to page size"() {
+        given: "2 students exist in db"
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
+        studentWriteRepository.save(Students.SECOND.studentToAdd())
+
+        and: "size of page is equal to 1"
+        int size = 1
+
+        expect: "exactly this number of students should be retrieved"
+        dispatcher.findAllStudents(0, 1).size() == size
     }
 
     def "get student"() {

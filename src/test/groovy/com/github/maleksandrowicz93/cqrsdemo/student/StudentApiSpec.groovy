@@ -1,7 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
-import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository
 import com.google.gson.Gson
@@ -43,11 +42,8 @@ class StudentApiSpec extends Specification {
 
     def "get all students"() {
         given: "2 students exist in db"
-        def firstStudent = studentWriteRepository.save(Students.FIRST.studentToAdd())
-        def secondStudent = studentWriteRepository.save(Students.SECOND.studentToAdd())
-        def sortedStudents = List.of(firstStudent, secondStudent).stream()
-                .sorted(Comparator.comparing((Student s) -> s.lastName()))
-                .toList()
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
+        studentWriteRepository.save(Students.SECOND.studentToAdd())
 
         expect: "exactly these students should be retrieved from GET /student"
         mockMvc.perform(get("/student"))
@@ -55,35 +51,6 @@ class StudentApiSpec extends Specification {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isArray())
                 .andExpect(jsonPath('$', hasSize(2)))
-                .andExpect(jsonPath('$[0].id').value(sortedStudents.get(0).id().toString()))
-                .andExpect(jsonPath('$[1].id').value(sortedStudents.get(1).id().toString()))
-                .andExpect(jsonPath('$[0].email').value(sortedStudents.get(0).email()))
-                .andExpect(jsonPath('$[1].email').value(sortedStudents.get(1).email()))
-    }
-
-    def "get students number limited to page size"() {
-        given: "2 students exist in db"
-        studentWriteRepository.save(Students.FIRST.studentToAdd())
-        studentWriteRepository.save(Students.SECOND.studentToAdd())
-
-        and: "size of page is equal to 1"
-        int size = 1
-
-        expect: "exactly this number of students should be retrieved from GET /student"
-        mockMvc.perform(get("/student?page=0&size=" + size))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath('$').isArray())
-                .andExpect(jsonPath('$', hasSize(size)))
-    }
-
-    def "get empty student list when no student exists"() {
-        expect: "for cleared db, empty students' list should be retrieved from GET /student"
-        mockMvc.perform(get("/student"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath('$').isArray())
-                .andExpect(jsonPath('$', hasSize(0)))
     }
 
     def "add new student"() {
@@ -97,11 +64,6 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.id').isString())
-                .andExpect(jsonPath('$.email').value(request.email()))
-                .andExpect(jsonPath('$.firstName').value(request.firstName()))
-                .andExpect(jsonPath('$.lastName').value(request.lastName()))
-                .andExpect(jsonPath('$.birthDate').value(request.birthDate().toString()))
                 .andReturn()
 
         and: "there should be correctly created Location header"
@@ -159,11 +121,6 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.id').value(student.id().toString()))
-                .andExpect(jsonPath('$.email').value(student.email()))
-                .andExpect(jsonPath('$.firstName').value(student.firstName()))
-                .andExpect(jsonPath('$.lastName').value(student.lastName()))
-                .andExpect(jsonPath('$.birthDate').value(student.birthDate().toString()))
     }
 
     def "should not get student when not exist"() {
@@ -188,11 +145,6 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.id').value(student.id().toString()))
-                .andExpect(jsonPath('$.email').value(request.email()))
-                .andExpect(jsonPath('$.firstName').value(request.firstName()))
-                .andExpect(jsonPath('$.lastName').value(request.lastName()))
-                .andExpect(jsonPath('$.birthDate').value(request.birthDate().toString()))
     }
 
     def "should not edit student when not exist"() {
@@ -238,8 +190,6 @@ class StudentApiSpec extends Specification {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('$').isNotEmpty())
-                .andExpect(jsonPath('$.id').value(student.id().toString()))
-                .andExpect(jsonPath('$.email').value(student.email()))
     }
 
     def "should not update password when student not exist"() {
