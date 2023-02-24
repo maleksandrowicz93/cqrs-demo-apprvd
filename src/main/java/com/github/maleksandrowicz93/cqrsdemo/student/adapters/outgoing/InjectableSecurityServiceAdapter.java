@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FieldDefaults(makeFinal = true)
 @RequiredArgsConstructor
-class DirectSecurityServiceAdapter implements SecurityService {
+class InjectableSecurityServiceAdapter implements SecurityService {
 
     SecurityFacade securityFacade;
 
