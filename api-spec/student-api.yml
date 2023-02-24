@@ -186,7 +186,7 @@ paths:
         description: new password
         required: true
         content:
-          application/json:
+          text/plain:
             schema:
               description: New password of a student
               type: string

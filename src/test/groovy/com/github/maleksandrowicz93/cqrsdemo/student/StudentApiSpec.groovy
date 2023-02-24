@@ -185,7 +185,7 @@ class StudentApiSpec extends Specification {
 
         expect: "this student should have updated password at PATCH /student/{id}"
         mockMvc.perform(put("/student/" + student.id() + "/password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.TEXT_PLAIN)
                 .content(Students.SECOND.password))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -195,7 +195,7 @@ class StudentApiSpec extends Specification {
     def "should not update password when student not exist"() {
         expect: "for cleared db, a student's password should not be updated at PATCH /student/{id}"
         mockMvc.perform(put("/student/" + UUID.randomUUID() + "/password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.TEXT_PLAIN)
                 .content(Students.SECOND.password))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -208,7 +208,7 @@ class StudentApiSpec extends Specification {
 
         expect: "his password should not be updated at PATCH /student/{id}"
         mockMvc.perform(put("/student/" + student.id() + "/password")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.TEXT_PLAIN)
                 .content(" "))
                 .andDo(print())
                 .andExpect(status().isBadRequest())

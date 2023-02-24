@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,12 +33,14 @@ class StudentController implements StudentApi {
     Environment environment;
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<List<StudentIdentification>> findAllStudents(Integer page, Integer size) {
         List<StudentIdentification> students = studentQueriesDispatcher.findAllStudents(page, size);
         return ResponseEntity.ok(students);
     }
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
         var result = studentWriteFacade.addStudent(saveStudentRequest);
         return result.value()
@@ -70,6 +73,7 @@ class StudentController implements StudentApi {
     }
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> findStudent(UUID id) {
         return studentQueriesDispatcher.findStudentById(id)
                 .map(ResponseEntity::ok)
@@ -77,6 +81,7 @@ class StudentController implements StudentApi {
     }
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
         var result = studentWriteFacade.editStudentData(id, saveStudentRequest);
         return result.value()
@@ -85,6 +90,7 @@ class StudentController implements StudentApi {
     }
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentIdentification> updatePassword(UUID id, String body) {
         var result = studentWriteFacade.updatePassword(id, body);
         return result.value()
@@ -93,6 +99,7 @@ class StudentController implements StudentApi {
     }
 
     @Override
+    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<Void> deleteStudent(UUID id) {
         studentWriteFacade.deleteStudent(id);
         return ResponseEntity.noContent().build();
