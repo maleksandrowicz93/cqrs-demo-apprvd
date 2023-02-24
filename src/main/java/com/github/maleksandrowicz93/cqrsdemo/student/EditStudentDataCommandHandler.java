@@ -4,6 +4,7 @@ import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandle
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandlerResultFactory;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.SecurityService;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -28,9 +28,9 @@ class EditStudentDataCommandHandler {
 
     StudentQueryRepository studentQueryRepository;
     StudentWriteRepository studentWriteRepository;
-    PasswordEncoder passwordEncoder;
     StudentMapper studentMapper;
     CommandHandlerResultFactory<StudentDto> resultFactory;
+    SecurityService securityService;
 
     CommandHandlerResult<StudentDto> handle(UUID studentId, SaveStudentRequest saveStudentRequest) {
         var email = saveStudentRequest.email();
@@ -47,7 +47,7 @@ class EditStudentDataCommandHandler {
         }
         var student = studentMapper.toStudent(saveStudentRequest)
                 .id(studentId)
-                .password(passwordEncoder.encode(saveStudentRequest.password()));
+                .password(securityService.encodePassword(saveStudentRequest.password()));
         var savedStudent = studentWriteRepository.save(student);
         var studentDto = studentMapper.toStudentDto(savedStudent);
         return resultFactory.create(studentDto, OK);
