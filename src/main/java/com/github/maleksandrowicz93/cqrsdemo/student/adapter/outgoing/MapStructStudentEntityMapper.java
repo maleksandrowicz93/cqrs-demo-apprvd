@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student.adapter.outgoing;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student;
 import org.mapstruct.Mapper;
@@ -21,7 +21,7 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     @Mapping(target = "firstName", expression = "java(student.firstName())")
     @Mapping(target = "lastName", expression = "java(student.lastName())")
     @Mapping(target = "birthDate", expression = "java(student.birthDate())")
-    StudentDto toStudentDto(StudentEntity student);
+    StudentData toStudentData(StudentEntity student);
 
     @Override
     @Mapping(target = "id", ignore = true)

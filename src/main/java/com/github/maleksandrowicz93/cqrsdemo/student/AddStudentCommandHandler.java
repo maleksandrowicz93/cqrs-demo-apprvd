@@ -3,7 +3,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ApiResult;
 import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ApiResultFactory;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.SecurityService;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository;
@@ -32,10 +32,10 @@ class AddStudentCommandHandler {
     StudentQueryRepository studentQueryRepository;
     StudentWriteRepository studentWriteRepository;
     StudentMapper studentMapper;
-    ApiResultFactory<StudentDto> resultFactory;
+    ApiResultFactory<StudentData> resultFactory;
     SecurityService securityService;
 
-    ApiResult<StudentDto> handle(SaveStudentRequest saveStudentRequest) {
+    ApiResult<StudentData> handle(SaveStudentRequest saveStudentRequest) {
         var email = saveStudentRequest.email();
         if (StringUtils.isBlank(email)) {
             log.error("Email should not be blank.");
@@ -53,7 +53,7 @@ class AddStudentCommandHandler {
         var student = studentMapper.toStudent(saveStudentRequest)
                 .password(securityService.encodePassword(saveStudentRequest.password()));
         var savedStudent = studentWriteRepository.save(student);
-        var studentDto = studentMapper.toStudentDto(savedStudent);
-        return resultFactory.create(OK, studentDto);
+        var studentData = studentMapper.toStudentData(savedStudent);
+        return resultFactory.create(OK, studentData);
     }
 }

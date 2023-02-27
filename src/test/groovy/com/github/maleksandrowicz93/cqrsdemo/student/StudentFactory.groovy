@@ -2,7 +2,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student
 
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student
 
@@ -12,7 +12,7 @@ interface StudentFactory {
 
     StudentIdentification studentIdentification(UUID id)
 
-    StudentDto studentDto(UUID id)
+    StudentData studentData(UUID id)
 
     Student studentToAdd()
 }

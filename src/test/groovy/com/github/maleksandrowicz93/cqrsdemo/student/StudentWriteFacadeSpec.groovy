@@ -31,7 +31,7 @@ class StudentWriteFacadeSpec extends Specification {
         then: "this student should be successfully added"
         def student = result.value()
         student.isPresent()
-        def expectedStudent = Students.FIRST.studentDto(student.get().id())
+        def expectedStudent = Students.FIRST.studentData(student.get().id())
         student.get() == expectedStudent
         result.code() == ResultCode.OK
     }
@@ -109,7 +109,7 @@ class StudentWriteFacadeSpec extends Specification {
         given: "a student exists in db"
         def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
         def id = studentEntity.id()
-        def expectedStudent = Students.SECOND.studentDto(id)
+        def expectedStudent = Students.SECOND.studentData(id)
 
         when: "user tries to edit student's data"
         def result = facade.editStudentData(id, Students.SECOND.saveStudentRequest())

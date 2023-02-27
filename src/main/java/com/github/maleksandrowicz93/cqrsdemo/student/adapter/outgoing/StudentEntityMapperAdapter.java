@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student.adapter.outgoing;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
@@ -23,9 +23,9 @@ class StudentEntityMapperAdapter implements StudentMapper {
     }
 
     @Override
-    public StudentDto toStudentDto(Student student) {
+    public StudentData toStudentData(Student student) {
         StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
-        return studentEntityMapper.toStudentDto(studentEntity);
+        return studentEntityMapper.toStudentData(studentEntity);
     }
 
     @Override

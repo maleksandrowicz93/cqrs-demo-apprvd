@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository
 import com.google.gson.Gson
@@ -69,7 +69,7 @@ class StudentApiSpec extends Specification {
         and: "there should be correctly created Location header"
         def response = result.getResponse()
         def location = response.getHeader(HttpHeaders.LOCATION)
-        def body = gson.fromJson(response.getContentAsString(), StudentDto)
+        def body = gson.fromJson(response.getContentAsString(), StudentData)
         location.contains("student/" + body.id())
     }
 

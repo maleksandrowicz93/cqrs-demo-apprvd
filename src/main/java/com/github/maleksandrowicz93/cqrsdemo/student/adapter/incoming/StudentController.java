@@ -5,7 +5,7 @@ import com.github.maleksandrowicz93.cqrsdemo.student.StudentWriteFacade;
 import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ApiResult;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentApi;
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -41,7 +41,7 @@ class StudentController implements StudentApi {
 
     @Override
     @CrossOrigin(origins = AllowedOrigin.FRONT_END)
-    public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
+    public ResponseEntity<StudentData> addStudent(SaveStudentRequest saveStudentRequest) {
         var result = studentWriteFacade.addStudent(saveStudentRequest);
         return result.value()
                 .map(student -> ResponseEntity
@@ -74,7 +74,7 @@ class StudentController implements StudentApi {
 
     @Override
     @CrossOrigin(origins = AllowedOrigin.FRONT_END)
-    public ResponseEntity<StudentDto> findStudent(UUID id) {
+    public ResponseEntity<StudentData> findStudent(UUID id) {
         return studentQueriesDispatcher.findStudentById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -82,7 +82,7 @@ class StudentController implements StudentApi {
 
     @Override
     @CrossOrigin(origins = AllowedOrigin.FRONT_END)
-    public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
+    public ResponseEntity<StudentData> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
         var result = studentWriteFacade.editStudentData(id, saveStudentRequest);
         return result.value()
                 .map(ResponseEntity::ok)

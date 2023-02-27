@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentMapper;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository;
@@ -39,8 +39,8 @@ public class StudentQueriesDispatcher {
         ));
     }
 
-    public Optional<StudentDto> findStudentById(UUID studentId) {
+    public Optional<StudentData> findStudentById(UUID studentId) {
         return studentQueryRepository.findById(studentId)
-                .map(studentMapper::toStudentDto);
+                .map(studentMapper::toStudentData);
     }
 }

@@ -54,7 +54,7 @@ class StudentQueriesDispatcherSpec extends Specification {
         given: "a student exists in db"
         def studentEntity = studentWriteRepository.save(Students.FIRST.studentToAdd())
         def id = studentEntity.id()
-        def expectedStudent = Students.FIRST.studentDto(id)
+        def expectedStudent = Students.FIRST.studentData(id)
 
         when: "user tries to retrieve student's data by student's id"
         def student = dispatcher.findStudentById(id)

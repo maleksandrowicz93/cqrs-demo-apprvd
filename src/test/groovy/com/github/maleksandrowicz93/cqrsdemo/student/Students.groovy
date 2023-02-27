@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.Student
 import lombok.Getter
@@ -66,8 +66,8 @@ enum Students implements StudentFactory {
     }
 
     @Override
-    StudentDto studentDto(UUID id) {
-        StudentDto.builder()
+    StudentData studentData(UUID id) {
+        StudentData.builder()
                 .id(id)
                 .email(email)
                 .firstName(firstName)

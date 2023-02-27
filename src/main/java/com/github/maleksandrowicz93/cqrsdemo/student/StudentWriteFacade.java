@@ -2,7 +2,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ApiResult;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentData;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,11 +20,11 @@ public class StudentWriteFacade {
     UpdatePasswordCommandHandler updatePasswordCommandHandler;
     DeleteStudentCommandHandler deleteStudentCommandHandler;
 
-    public ApiResult<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
+    public ApiResult<StudentData> addStudent(SaveStudentRequest saveStudentRequest) {
         return addStudentCommandHandler.handle(saveStudentRequest);
     }
 
-    public ApiResult<StudentDto> editStudentData(UUID studentId, SaveStudentRequest saveStudentRequest) {
+    public ApiResult<StudentData> editStudentData(UUID studentId, SaveStudentRequest saveStudentRequest) {
         return editstudentDataCommandHandler.handle(studentId, saveStudentRequest);
     }
 

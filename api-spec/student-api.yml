@@ -49,7 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/StudentData'
         '409':
           $ref: '#/components/responses/409Conflict'
         '400':
@@ -112,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/StudentData'
         '404':
           $ref: '#/components/responses/404NotFound'
         '500':
@@ -143,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/StudentData'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -238,7 +238,7 @@ components:
       type: string
       format: uuid
       example: 78999bb1-bddb-48d9-966f-927e53a21657
-    StudentDto:
+    StudentData:
       description: Model representing a student account data
       type: object
       required:
