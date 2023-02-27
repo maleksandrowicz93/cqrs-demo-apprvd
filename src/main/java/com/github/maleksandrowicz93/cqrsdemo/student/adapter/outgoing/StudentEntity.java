@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.adapters.outgoing;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapter.outgoing;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

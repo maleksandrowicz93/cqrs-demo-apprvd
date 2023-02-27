@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.port.incoming;
+package com.github.maleksandrowicz93.cqrsdemo.student.api.result;
 
 public enum ResultCode {
 

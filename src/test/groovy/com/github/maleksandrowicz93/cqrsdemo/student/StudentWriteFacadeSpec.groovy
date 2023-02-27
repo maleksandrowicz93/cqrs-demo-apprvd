@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultCode
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.ResultProperty
+import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ResultCode
+import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ResultProperty
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentQueryRepository
 import com.github.maleksandrowicz93.cqrsdemo.student.port.outgoing.StudentWriteRepository
 import org.springframework.beans.factory.annotation.Autowired

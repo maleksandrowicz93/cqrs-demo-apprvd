@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.adapters.outgoing;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapter.outgoing;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

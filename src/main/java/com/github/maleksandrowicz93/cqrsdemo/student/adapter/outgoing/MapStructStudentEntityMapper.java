@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.adapters.outgoing;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapter.outgoing;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;

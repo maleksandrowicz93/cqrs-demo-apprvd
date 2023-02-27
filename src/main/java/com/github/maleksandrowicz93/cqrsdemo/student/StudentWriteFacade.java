@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.CommandHandlerResult;
+import com.github.maleksandrowicz93.cqrsdemo.student.api.result.ApiResult;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.port.incoming.StudentIdentification;
@@ -20,15 +20,15 @@ public class StudentWriteFacade {
     UpdatePasswordCommandHandler updatePasswordCommandHandler;
     DeleteStudentCommandHandler deleteStudentCommandHandler;
 
-    public CommandHandlerResult<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
+    public ApiResult<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
         return addStudentCommandHandler.handle(saveStudentRequest);
     }
 
-    public CommandHandlerResult<StudentDto> editStudentData(UUID studentId, SaveStudentRequest saveStudentRequest) {
+    public ApiResult<StudentDto> editStudentData(UUID studentId, SaveStudentRequest saveStudentRequest) {
         return editstudentDataCommandHandler.handle(studentId, saveStudentRequest);
     }
 
-    public CommandHandlerResult<StudentIdentification> updatePassword(UUID studentId, String password) {
+    public ApiResult<StudentIdentification> updatePassword(UUID studentId, String password) {
         return updatePasswordCommandHandler.handle(studentId, password);
     }
 

@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.adapters.incoming;
+package com.github.maleksandrowicz93.cqrsdemo.student.adapter.incoming;
 
 interface AllowedOrigin {
 

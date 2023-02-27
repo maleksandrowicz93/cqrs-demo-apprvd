@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.cqrsdemo.student.port.incoming;
+package com.github.maleksandrowicz93.cqrsdemo.student.api.result;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Value
 @Builder(access = AccessLevel.PACKAGE)
-public class CommandHandlerResult<T> {
+public class ApiResult<T> {
 
     @Getter(AccessLevel.NONE)
     T value;
