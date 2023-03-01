@@ -1,5 +1,8 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.student.StudentQueryRepository
+import com.github.maleksandrowicz93.cqrsdemo.student.StudentWriteRepository
+
 class StudentUtils {
 
     static final int PAGE = 0

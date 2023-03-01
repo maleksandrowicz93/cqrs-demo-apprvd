@@ -2,20 +2,12 @@ package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode
 import com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultProperty
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
-@SpringBootTest
-@ContextConfiguration
 class StudentFacadeSpec extends Specification {
 
-    @Autowired
     StudentFacade facade
-    @Autowired
     StudentQueryRepository studentQueryRepository
-    @Autowired
     StudentWriteRepository studentWriteRepository
 
     def setup() {

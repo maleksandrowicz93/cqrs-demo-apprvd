@@ -22,12 +22,12 @@
         <!--        Modules-->
         <dependency>
             <groupId>com.github.maleksandrowicz93</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>shared</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.maleksandrowicz93</groupId>
-            <artifactId>shared</artifactId>
+            <artifactId>domain</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -62,6 +62,31 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>
+                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentUtils
+                                </include>
+                                <include>
+                                    com.github.maleksandrowicz93.cqrsdemo.student.Students
+                                </include>
+                                <include>
+                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentFactory
+                                </include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>

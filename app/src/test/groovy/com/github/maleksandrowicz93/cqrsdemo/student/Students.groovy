@@ -6,13 +6,10 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand
-import lombok.Getter
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import java.time.LocalDate
 import java.time.Month
 
-@Getter
 enum Students implements StudentFactory {
 
     FIRST(
@@ -30,8 +27,6 @@ enum Students implements StudentFactory {
             LocalDate.of(2000, Month.JANUARY, 1)
     )
 
-    private final passwordEncoder = new BCryptPasswordEncoder()
-
     final String email
     final String firstName
     final String lastName
@@ -44,8 +39,14 @@ enum Students implements StudentFactory {
         this.firstName = firstName
         this.lastName = lastName
         this.password = password
-        this.encodedPassword = passwordEncoder.encode(this.password)
+        this.encodedPassword = encodePassword()
         this.birthDate = birthDate
+    }
+
+    private String encodePassword() {
+        def bytes = this.password.bytes
+        def encodedBytes = Base64.getEncoder().encode(bytes)
+        return new String(encodedBytes)
     }
 
     @Override

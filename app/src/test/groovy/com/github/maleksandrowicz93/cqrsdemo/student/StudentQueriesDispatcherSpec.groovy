@@ -1,20 +1,12 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 
-@SpringBootTest
-@ContextConfiguration
 class StudentQueriesDispatcherSpec extends Specification {
 
-    @Autowired
     StudentQueriesDispatcher dispatcher
-    @Autowired
     StudentQueryRepository studentQueryRepository
-    @Autowired
     StudentWriteRepository studentWriteRepository
 
     def setup() {

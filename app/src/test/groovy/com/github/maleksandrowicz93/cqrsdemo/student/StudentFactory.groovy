@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.student.Student
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.DeleteStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
@@ -15,5 +16,6 @@ interface StudentFactory {
     DeleteStudentCommand deleteStudentCommand(UUID id)
     StudentIdentification studentIdentification(UUID id)
     StudentData studentData(UUID id)
+
     Student studentToAdd()
 }
