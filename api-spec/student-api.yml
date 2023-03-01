@@ -46,10 +46,13 @@ paths:
       responses:
         '201':
           description: Added student's data
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentData'
+                $ref: '#/components/schemas/StudentDto'
         '409':
           $ref: '#/components/responses/409Conflict'
         '400':
@@ -89,7 +92,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentIdentificationList'
+                $ref: '#/components/schemas/StudentIdDtoList'
         '500':
           $ref: '#/components/responses/500InternalServerError'
   /student/{id}:
@@ -100,19 +103,14 @@ paths:
       description: Retrieves existing student's data by his id
       operationId: findStudent
       parameters:
-        - name: id
-          in: path
-          description: id of a student
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/ID'
       responses:
         '200':
           description: Student's data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentData'
+                $ref: '#/components/schemas/StudentDto'
         '404':
           $ref: '#/components/responses/404NotFound'
         '500':
@@ -124,12 +122,7 @@ paths:
       description: Edits student's account data
       operationId: editStudent
       parameters:
-        - name: id
-          in: path
-          description: id of a student
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/ID'
       requestBody:
         description: new student's account data
         required: true
@@ -143,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentData'
+                $ref: '#/components/schemas/StudentDto'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -157,12 +150,7 @@ paths:
       description: Deletes a student's account by his id
       operationId: deleteStudent
       parameters:
-        - name: id
-          in: path
-          description: id of a student
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/ID'
       responses:
         '204':
           description: Student's account data edited successfully
@@ -176,12 +164,7 @@ paths:
       description: Updates a student's password
       operationId: updatePassword
       parameters:
-        - name: id
-          in: path
-          description: id of a student
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+        - $ref: '#/components/parameters/ID'
       requestBody:
         description: new password
         required: true
@@ -198,7 +181,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentIdentification'
+                $ref: '#/components/schemas/StudentIdDto'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -206,22 +189,13 @@ paths:
         '500':
           $ref: '#/components/responses/500InternalServerError'
 components:
-  responses:
-    400BadRequest:
-      description: Invalid credentials
-    404NotFound:
-      description: Student not found
-    409Conflict:
-      description: Student already exists
-    500InternalServerError:
-      description: Unknown error
   schemas:
-    StudentIdentificationList:
+    StudentIdDtoList:
       description: List of students
       type: array
       items:
-        $ref: '#/components/schemas/StudentIdentification'
-    StudentIdentification:
+        $ref: '#/components/schemas/StudentIdDto'
+    StudentIdDto:
       description: Model representing a student account data
       type: object
       required:
@@ -238,7 +212,7 @@ components:
       type: string
       format: uuid
       example: 78999bb1-bddb-48d9-966f-927e53a21657
-    StudentData:
+    StudentDto:
       description: Model representing a student account data
       type: object
       required:
@@ -247,8 +221,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
       allOf:
-        - $ref: '#/components/schemas/BasicStudentData'
-    BasicStudentData:
+        - $ref: '#/components/schemas/BasicStudentDto'
+    BasicStudentDto:
       description: Model representing basic reusable student's data
       type: object
       required:
@@ -278,4 +252,31 @@ components:
           format: password
           example: password123
       allOf:
-        - $ref: '#/components/schemas/BasicStudentData'
+        - $ref: '#/components/schemas/BasicStudentDto'
+  parameters:
+    ID:
+      name: id
+      in: path
+      description: id of a student
+      required: true
+      schema:
+        $ref: '#/components/schemas/UUID'
+  responses:
+    400BadRequest:
+      description: Invalid credentials
+    404NotFound:
+      description: Student not found
+    409Conflict:
+      description: Student already exists
+      headers:
+        Location:
+          $ref: '#/components/headers/Location'
+    500InternalServerError:
+      description: Unknown error
+  headers:
+    Location:
+      description: url of the resource
+      schema:
+        type: string
+        format: uri
+        example: 'http://localhost:8000/cqrs-demo/student/78999bb1-bddb-48d9-966f-927e53a21657'
