@@ -29,9 +29,10 @@ class StudentQueriesDispatcherSpec extends Specification {
                 Students.SECOND.studentIdentification(secondStudent.id()))
 
         when: "user tries to retrieve them"
-        def students = dispatcher.findAllStudents(0, 10)
+        def resultPage = dispatcher.findAllStudents(0, 10)
 
         then: "gets exactly these students and no more"
+        def students = resultPage.content()
         students.size() == 2
         students.eachWithIndex { StudentIdentification student, int i -> student == expectedStudents.get(i) }
     }
@@ -45,7 +46,7 @@ class StudentQueriesDispatcherSpec extends Specification {
         int size = 1
 
         expect: "exactly this number of students should be retrieved"
-        dispatcher.findAllStudents(0, 1).size() == size
+        dispatcher.findAllStudents(0, 1).content().size() == size
     }
 
     def "get student"() {

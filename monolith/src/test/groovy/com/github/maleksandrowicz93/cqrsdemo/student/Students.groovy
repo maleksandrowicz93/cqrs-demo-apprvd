@@ -1,8 +1,11 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.DeleteStudentCommand
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
-import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.SaveStudentRequest
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand
 import lombok.Getter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
@@ -33,7 +36,7 @@ enum Students implements StudentFactory {
     final String firstName
     final String lastName
     final String password
-    final String encodedPassword;
+    final String encodedPassword
     final LocalDate birthDate
 
     Students(email, firstName, lastName, password, birthDate) {
@@ -41,18 +44,45 @@ enum Students implements StudentFactory {
         this.firstName = firstName
         this.lastName = lastName
         this.password = password
-        this.encodedPassword = passwordEncoder.encode(password);
+        this.encodedPassword = passwordEncoder.encode(this.password)
         this.birthDate = birthDate
     }
 
     @Override
-    SaveStudentRequest saveStudentRequest() {
-        SaveStudentRequest.builder()
+    AddStudentCommand addStudentCommand() {
+        AddStudentCommand.builder()
                 .email(email)
                 .firstName(firstName)
                 .lastName(lastName)
                 .birthDate(birthDate)
                 .password(password)
+                .build()
+    }
+
+    @Override
+    EditStudentCommand editStudentCommand(UUID id) {
+        EditStudentCommand.builder()
+                .id(id)
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .birthDate(birthDate)
+                .password(password)
+                .build()
+    }
+
+    @Override
+    UpdatePasswordCommand updatePasswordCommand(UUID id) {
+        return UpdatePasswordCommand.builder()
+                .id(id)
+                .password(password)
+                .build()
+    }
+
+    @Override
+    DeleteStudentCommand deleteStudentCommand(UUID id) {
+        return DeleteStudentCommand.builder()
+                .id(id)
                 .build()
     }
 

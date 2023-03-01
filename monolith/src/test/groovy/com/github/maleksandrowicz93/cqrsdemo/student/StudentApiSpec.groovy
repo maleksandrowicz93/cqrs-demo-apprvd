@@ -11,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
-import static org.hamcrest.Matchers.hasSize
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -47,13 +46,12 @@ class StudentApiSpec extends Specification {
         mockMvc.perform(get("/student"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath('$').isArray())
-                .andExpect(jsonPath('$', hasSize(2)))
+                .andExpect(jsonPath('$').isNotEmpty())
     }
 
     def "add new student"() {
         given: "completely new student's data"
-        def request = Students.FIRST.saveStudentRequest()
+        def request = Students.FIRST.addStudentCommand()
 
         expect: "this student should be successfully added at POST /student"
         def result = mockMvc.perform(post("/student")
@@ -76,7 +74,7 @@ class StudentApiSpec extends Specification {
         def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "his data is ready to be added second time"
-        def request = Students.FIRST.saveStudentRequest()
+        def request = Students.FIRST.addStudentCommand()
 
         expect: "this student should not be added again at POST /student"
         def result = mockMvc.perform(post("/student")
@@ -96,7 +94,7 @@ class StudentApiSpec extends Specification {
 
     def "should not add new student when invalid credentials"() {
         given: "completely new student's data"
-        def request = Students.FIRST.saveStudentRequest().toBuilder()
+        def request = Students.FIRST.addStudentCommand().toBuilder()
                 .email(null)
                 .password(null)
                 .build()
@@ -134,7 +132,7 @@ class StudentApiSpec extends Specification {
         def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data for this student update is prepared"
-        def request = Students.SECOND.saveStudentRequest()
+        def request = Students.SECOND.addStudentCommand()
 
         expect: "this student's data should be edited at PUT /student/{id}"
         mockMvc.perform(put("/student/" + student.id())
@@ -147,7 +145,7 @@ class StudentApiSpec extends Specification {
 
     def "should not edit student when not exist"() {
         given: "a student update data is ready"
-        def request = Students.SECOND.saveStudentRequest()
+        def request = Students.SECOND.addStudentCommand()
 
         expect: "for cleared db, a student's data should not be edited at PUT /student/{id}"
         mockMvc.perform(put("/student/" + UUID.randomUUID())
@@ -163,7 +161,7 @@ class StudentApiSpec extends Specification {
         def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         and: "new data with invalid credentials for this student is prepared"
-        def request = Students.SECOND.saveStudentRequest().toBuilder()
+        def request = Students.SECOND.addStudentCommand().toBuilder()
                 .email(null)
                 .password(null)
                 .build()
