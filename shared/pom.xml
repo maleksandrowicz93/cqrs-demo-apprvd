@@ -9,21 +9,11 @@
         <relativePath/>
     </parent>
     <groupId>com.github.maleksandrowicz93</groupId>
-    <artifactId>cqrs-demo</artifactId>
+    <artifactId>shared</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cqrs-demo</name>
-    <description>Parent - Demo project showing cqrs with hexagonal architecture</description>
+    <name>shared</name>
+    <description>Shared API - Demo project showing cqrs with hexagonal architecture</description>
     <properties>
         <java.version>17</java.version>
     </properties>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>domain</module>
-        <module>app</module>
-        <module>adapters</module>
-        <module>monolith</module>
-        <module>shared</module>
-    </modules>
 </project>

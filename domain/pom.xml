@@ -9,21 +9,27 @@
         <relativePath/>
     </parent>
     <groupId>com.github.maleksandrowicz93</groupId>
-    <artifactId>cqrs-demo</artifactId>
+    <artifactId>domain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cqrs-demo</name>
-    <description>Parent - Demo project showing cqrs with hexagonal architecture</description>
+    <name>domain</name>
+    <description>Domain - Demo project showing cqrs with hexagonal architecture</description>
     <properties>
         <java.version>17</java.version>
     </properties>
 
-    <packaging>pom</packaging>
+    <dependencies>
+<!--        Modules-->
+        <dependency>
+            <groupId>com.github.maleksandrowicz93</groupId>
+            <artifactId>shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <modules>
-        <module>domain</module>
-        <module>app</module>
-        <module>adapters</module>
-        <module>monolith</module>
-        <module>shared</module>
-    </modules>
+<!--        External-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 </project>
