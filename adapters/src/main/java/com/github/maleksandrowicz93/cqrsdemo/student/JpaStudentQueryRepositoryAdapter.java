@@ -1,12 +1,13 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
+import com.github.maleksandrowicz93.cqrsdemo.repository.ResultPage;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,11 +25,11 @@ class JpaStudentQueryRepositoryAdapter implements StudentQueryRepository {
     }
 
     @Override
-    public List<Student> findAll(int page, int size) {
+    public ResultPage<Student> findAll(int page, int size) {
         var pageRequest = getPageRequest(page, size);
-        return jpaStudentQueryRepository.findAll(pageRequest)
-                .map(studentEntityMapper::toStudent)
-                .getContent();
+        Page<Student> studentPage = jpaStudentQueryRepository.findAll(pageRequest)
+                .map(studentEntityMapper::toStudent);
+        return new ResultPage<>(studentPage.getTotalPages(), studentPage.getContent());
     }
 
     private PageRequest getPageRequest(int page, int size) {

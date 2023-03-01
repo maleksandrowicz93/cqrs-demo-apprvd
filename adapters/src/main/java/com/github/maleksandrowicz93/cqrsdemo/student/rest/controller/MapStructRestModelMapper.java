@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student.rest.controller;
 
+import com.github.maleksandrowicz93.cqrsdemo.repository.ResultPage;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.DeleteStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand;
@@ -9,13 +10,22 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentIdDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentPage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 interface MapStructRestModelMapper extends RestModelMapper {
+
+    @Override
+    @Mapping(target = "totalPages", expression = "java(resultPage.totalPages())")
+    @Mapping(target = "students", expression = "java(toStudentIdStoList(resultPage.content()))")
+    StudentPage toStudentPage(ResultPage<StudentIdentification> resultPage);
+
+    List<StudentIdDto> toStudentIdStoList(List<StudentIdentification> studentIdentificationList);
 
     @Override
     @Mapping(target = "id", expression = "java(studentIdentification.id())")

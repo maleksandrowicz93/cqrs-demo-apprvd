@@ -7,6 +7,7 @@ import com.github.maleksandrowicz93.cqrsdemo.student.rest.api.StudentApi;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentIdDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentPage;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.env.Environment;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultProperty.CONFLICTED_ID;
@@ -35,11 +35,10 @@ class StudentController implements StudentApi {
 
     @Override
     @CrossOrigin(origins = AllowedOrigin.FRONT_END)
-    public ResponseEntity<List<StudentIdDto>> findAllStudents(Integer page, Integer size) {
-        List<StudentIdDto> students = studentQueriesDispatcher.findAllStudents(page, size).stream()
-                .map(restModelMapper::toStudentIdDto)
-                .toList();
-        return ResponseEntity.ok(students);
+    public ResponseEntity<StudentPage> findAllStudents(Integer page, Integer size) {
+        var resultPage = studentQueriesDispatcher.findAllStudents(page, size);
+        var studentPage = restModelMapper.toStudentPage(resultPage);
+        return ResponseEntity.ok(studentPage);
     }
 
     @Override

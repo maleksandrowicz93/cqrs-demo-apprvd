@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student.rest.controller;
 
+import com.github.maleksandrowicz93.cqrsdemo.repository.ResultPage;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.DeleteStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand;
@@ -9,11 +10,13 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.SaveStudentRequest;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentDto;
 import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentIdDto;
+import com.github.maleksandrowicz93.cqrsdemo.student.rest.dto.StudentPage;
 
 import java.util.UUID;
 
 interface RestModelMapper {
 
+    StudentPage toStudentPage(ResultPage<StudentIdentification> resultPage);
     StudentIdDto toStudentIdDto(StudentIdentification studentIdentification);
     StudentDto toStudentDto(StudentData studentData);
     AddStudentCommand toAddStudentCommand(SaveStudentRequest request);
