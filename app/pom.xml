@@ -74,13 +74,13 @@
                         <configuration>
                             <includes>
                                 <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentUtils
+                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentUtils.groovy
                                 </include>
                                 <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.Students
+                                    com.github.maleksandrowicz93.cqrsdemo.student.Students.groovy
                                 </include>
                                 <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentFactory
+                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentFactory.groovy
                                 </include>
                             </includes>
                         </configuration>

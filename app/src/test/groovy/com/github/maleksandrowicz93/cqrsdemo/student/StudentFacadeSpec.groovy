@@ -6,9 +6,14 @@ import spock.lang.Specification
 
 class StudentFacadeSpec extends Specification {
 
-    StudentFacade facade
-    StudentQueryRepository studentQueryRepository
-    StudentWriteRepository studentWriteRepository
+    InMemoryStudentRepository inMemoryStudentRepository = new InMemoryStudentRepository()
+    StudentQueryRepository studentQueryRepository = inMemoryStudentRepository
+    StudentWriteRepository studentWriteRepository = inMemoryStudentRepository
+    StudentMapper studentMapper = StubFactory.INSTANCE.studentMapper()
+    SecurityService securityService = StubFactory.INSTANCE.securityService()
+    StudentServicesFactory factory = new StudentServicesFactory(inMemoryStudentRepository, inMemoryStudentRepository,
+            studentMapper, securityService)
+    StudentFacade facade = this.factory.studentFacade()
 
     def setup() {
         StudentUtils.cleanRepository(studentQueryRepository, studentWriteRepository)

@@ -7,6 +7,7 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentData
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand
 
+import java.security.InvalidParameterException
 import java.time.LocalDate
 import java.time.Month
 
@@ -47,6 +48,32 @@ enum Students implements StudentFactory {
         def bytes = this.password.bytes
         def encodedBytes = Base64.getEncoder().encode(bytes)
         return new String(encodedBytes)
+    }
+
+    static StudentFactory from(Student student) {
+        for (Students s : values()) {
+            if (s.email == student.email()) {
+                return s;
+            }
+        }
+        throw new InvalidParameterException("Student not defined in factory")
+    }
+
+    @Override
+    Student studentToAdd() {
+        addedStudent(null)
+    }
+
+    @Override
+    Student addedStudent(UUID id) {
+        Student.builder()
+                .id(id)
+                .email(email)
+                .firstName(firstName)
+                .lastName(lastName)
+                .birthDate(birthDate)
+                .password(encodedPassword)
+                .build()
     }
 
     @Override
@@ -103,17 +130,6 @@ enum Students implements StudentFactory {
                 .firstName(firstName)
                 .lastName(lastName)
                 .birthDate(birthDate)
-                .build()
-    }
-
-    @Override
-    Student studentToAdd() {
-        Student.builder()
-                .email(email)
-                .firstName(firstName)
-                .lastName(lastName)
-                .birthDate(birthDate)
-                .password(encodedPassword)
                 .build()
     }
 }

@@ -18,17 +18,24 @@ class StudentConfig {
     SecurityService securityService;
 
     @Bean
-    StudentQueriesDispatcher studentQueriesDispatcher() {
-        return new StudentQueriesDispatcher(studentQueryRepository, studentMapper);
+    StudentServicesFactory studentServicesFactory() {
+        return new StudentServicesFactory(studentWriteRepository, studentQueryRepository,
+                studentMapper, securityService);
+    }
+
+    @Bean
+    StudentQueriesDispatcher studentQueriesDispatcher(StudentServicesFactory factory) {
+        return factory.studentQueriesDispatcher();
     }
 
     @Bean
     StudentFacade studentFacade(
+            StudentServicesFactory factory,
             AddStudentCommandHandler addStudentCommandHandler,
             EditStudentDataCommandHandler editStudentDataCommandHandler,
             UpdatePasswordCommandHandler updatePasswordCommandHandler,
             DeleteStudentCommandHandler deleteStudentCommandHandler) {
-        return new StudentFacade(addStudentCommandHandler,
+        return factory.studentFacade(addStudentCommandHandler,
                 editStudentDataCommandHandler,
                 updatePasswordCommandHandler,
                 deleteStudentCommandHandler);
@@ -36,46 +43,37 @@ class StudentConfig {
 
     @Bean
     AddStudentCommandHandler addStudentCommandHandler(
+            StudentServicesFactory factory,
             ApiResultFactory<StudentData> studentDataApiResultFactory) {
-        return new AddStudentCommandHandler(studentQueryRepository,
-                studentWriteRepository,
-                studentMapper,
-                studentDataApiResultFactory,
-                securityService);
+        return factory.addStudentCommandHandler(studentDataApiResultFactory);
     }
 
     @Bean
-    ApiResultFactory<StudentData> studentDataApiResultFactory() {
-        return new StudentDataApiResultFactory();
+    ApiResultFactory<StudentData> studentDataApiResultFactory(StudentServicesFactory factory) {
+        return factory.studentDataApiResultFactory();
     }
 
     @Bean
     EditStudentDataCommandHandler editStudentDataCommandHandler(
+            StudentServicesFactory factory,
             ApiResultFactory<StudentData> studentDataApiResultFactory) {
-        return new EditStudentDataCommandHandler(studentQueryRepository,
-                studentWriteRepository,
-                studentMapper,
-                studentDataApiResultFactory,
-                securityService);
+        return factory.editStudentDataCommandHandler(studentDataApiResultFactory);
     }
 
     @Bean
     UpdatePasswordCommandHandler updatePasswordCommandHandler(
+            StudentServicesFactory factory,
             ApiResultFactory<StudentIdentification> studentIdentificationApiResultFactory) {
-        return new UpdatePasswordCommandHandler(studentQueryRepository,
-                studentWriteRepository,
-                studentMapper,
-                studentIdentificationApiResultFactory,
-                securityService);
+        return factory.updatePasswordCommandHandler(studentIdentificationApiResultFactory);
     }
 
     @Bean
-    ApiResultFactory<StudentIdentification> studentIdentificationApiResultFactory() {
-        return new StudentIdentificationApiResultFactory();
+    ApiResultFactory<StudentIdentification> studentIdentificationApiResultFactory(StudentServicesFactory factory) {
+        return factory.studentIdentificationApiResultFactory();
     }
 
     @Bean
-    DeleteStudentCommandHandler deleteStudentCommandHandler() {
-        return new DeleteStudentCommandHandler(studentQueryRepository, studentWriteRepository);
+    DeleteStudentCommandHandler deleteStudentCommandHandler(StudentServicesFactory factory) {
+        return factory.deleteStudentCommandHandler();
     }
 }

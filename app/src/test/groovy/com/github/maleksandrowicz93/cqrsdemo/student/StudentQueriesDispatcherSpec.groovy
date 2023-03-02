@@ -5,9 +5,14 @@ import spock.lang.Specification
 
 class StudentQueriesDispatcherSpec extends Specification {
 
-    StudentQueriesDispatcher dispatcher
-    StudentQueryRepository studentQueryRepository
-    StudentWriteRepository studentWriteRepository
+    InMemoryStudentRepository inMemoryStudentRepository = new InMemoryStudentRepository()
+    StudentQueryRepository studentQueryRepository = inMemoryStudentRepository
+    StudentWriteRepository studentWriteRepository = inMemoryStudentRepository
+    StudentMapper studentMapper = StubFactory.INSTANCE.studentMapper()
+    SecurityService securityService = StubFactory.INSTANCE.securityService()
+    StudentServicesFactory factory = new StudentServicesFactory(studentWriteRepository, studentQueryRepository,
+            studentMapper, securityService)
+    StudentQueriesDispatcher dispatcher = factory.studentQueriesDispatcher()
 
     def setup() {
         StudentUtils.cleanRepository(studentQueryRepository, studentWriteRepository)

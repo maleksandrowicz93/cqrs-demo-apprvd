@@ -33,7 +33,7 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     Student toStudent(AddStudentCommand command);
 
     @Override
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", expression = "java(command.id())")
     @Mapping(target = "email", expression = "java(command.email())")
     @Mapping(target = "password", expression = "java(command.password())")
     @Mapping(target = "firstName", expression = "java(command.firstName())")
