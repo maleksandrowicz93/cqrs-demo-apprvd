@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -8,22 +9,42 @@
         <version>3.0.2</version>
         <relativePath/>
     </parent>
+
     <groupId>com.github.maleksandrowicz93</groupId>
     <artifactId>cqrs-demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>cqrs-demo</name>
-    <description>Parent - Demo project showing cqrs with hexagonal architecture</description>
-    <properties>
-        <java.version>17</java.version>
-    </properties>
-
     <packaging>pom</packaging>
+    <description>Parent - Demo project showing cqrs with hexagonal architecture</description>
+
+    <properties>
+        <revision>0.0.1-SNAPSHOT</revision>
+        <java.version>17</java.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <spockframework.version>2.3-groovy-4.0</spockframework.version>
+    </properties>
 
     <modules>
         <module>adapters</module>
         <module>app</module>
+        <module>bom/bom-parent</module>
+        <module>bom/bom-open-api</module>
+        <module>bom/bom-tests</module>
+        <module>bom/bom-other-libs</module>
         <module>domain</module>
         <module>monolith</module>
         <module>shared</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>bom-parent</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
