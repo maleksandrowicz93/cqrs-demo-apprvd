@@ -1,11 +1,12 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.TestUtils
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
 import spock.lang.Specification
 
-class StubFactory extends Specification {
+class StudentStubFactory extends Specification {
 
-    static final INSTANCE = new StubFactory()
+    static final INSTANCE = new StudentStubFactory()
 
     StudentMapper studentMapper() {
         Stub(StudentMapper) {
@@ -31,7 +32,7 @@ class StubFactory extends Specification {
 
     SecurityService securityService() {
         Stub(SecurityService) {
-            encodePassword(_ as String) >> "saho8#9ad=";
+            encodePassword(_ as String) >> { String password -> TestUtils.encodePassword(password) }
         }
     }
 }

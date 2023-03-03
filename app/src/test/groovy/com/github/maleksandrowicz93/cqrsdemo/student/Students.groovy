@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
+import com.github.maleksandrowicz93.cqrsdemo.TestUtils
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.DeleteStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
@@ -40,14 +41,8 @@ enum Students implements StudentFactory {
         this.firstName = firstName
         this.lastName = lastName
         this.password = password
-        this.encodedPassword = encodePassword()
+        this.encodedPassword = TestUtils.encodePassword(this.password)
         this.birthDate = birthDate
-    }
-
-    private String encodePassword() {
-        def bytes = this.password.bytes
-        def encodedBytes = Base64.getEncoder().encode(bytes)
-        return new String(encodedBytes)
     }
 
     static StudentFactory from(Student student) {

@@ -8,8 +8,8 @@ class StudentQueriesDispatcherSpec extends Specification {
     InMemoryStudentRepository inMemoryStudentRepository = new InMemoryStudentRepository()
     StudentQueryRepository studentQueryRepository = inMemoryStudentRepository
     StudentWriteRepository studentWriteRepository = inMemoryStudentRepository
-    StudentMapper studentMapper = StubFactory.INSTANCE.studentMapper()
-    SecurityService securityService = StubFactory.INSTANCE.securityService()
+    StudentMapper studentMapper = StudentStubFactory.INSTANCE.studentMapper()
+    SecurityService securityService = StudentStubFactory.INSTANCE.securityService()
     StudentServicesFactory factory = new StudentServicesFactory(studentWriteRepository, studentQueryRepository,
             studentMapper, securityService)
     StudentQueriesDispatcher dispatcher = factory.studentQueriesDispatcher()

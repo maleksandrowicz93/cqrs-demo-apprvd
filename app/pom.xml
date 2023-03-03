@@ -71,10 +71,13 @@
                         <configuration>
                             <excludes>
                                 <exclude>
-                                    **/student/StubFactory.*
+                                    **/security/SecurityStubFactory.*
                                 </exclude>
                                 <exclude>
                                     **/student/StudentFacadeSpec.*
+                                </exclude>
+                                <exclude>
+                                    **/student/StudentStubFactory.*
                                 </exclude>
                                 <exclude>
                                     **/student/StudentQueriesDispatcherSpec.*
