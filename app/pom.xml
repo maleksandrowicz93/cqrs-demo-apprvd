@@ -71,6 +71,9 @@
                         <configuration>
                             <excludes>
                                 <exclude>
+                                    **/security/SecurityFacadeSpec.*
+                                </exclude>
+                                <exclude>
                                     **/security/SecurityStubFactory.*
                                 </exclude>
                                 <exclude>
@@ -78,9 +81,6 @@
                                 </exclude>
                                 <exclude>
                                     **/student/StudentStubFactory.*
-                                </exclude>
-                                <exclude>
-                                    **/student/StudentQueriesDispatcherSpec.*
                                 </exclude>
                             </excludes>
                         </configuration>
