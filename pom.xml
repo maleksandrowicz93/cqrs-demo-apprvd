@@ -12,7 +12,7 @@
 
     <groupId>com.github.maleksandrowicz93</groupId>
     <artifactId>cqrs-demo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>cqrs-demo</name>
     <packaging>pom</packaging>
     <description>Parent - Demo project showing cqrs with hexagonal architecture</description>
@@ -20,17 +20,12 @@
     <properties>
         <revision>0.0.1-SNAPSHOT</revision>
         <java.version>17</java.version>
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
-        <spockframework.version>2.3-groovy-4.0</spockframework.version>
     </properties>
 
     <modules>
         <module>adapters</module>
         <module>app</module>
-        <module>bom/bom-parent</module>
-        <module>bom/bom-open-api</module>
-        <module>bom/bom-tests</module>
-        <module>bom/bom-other-libs</module>
+        <module>bom</module>
         <module>domain</module>
         <module>monolith</module>
         <module>shared</module>
@@ -40,11 +35,25 @@
         <dependencies>
             <dependency>
                 <groupId>com.github.maleksandrowicz93</groupId>
-                <artifactId>bom-parent</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>bom</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Spec.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

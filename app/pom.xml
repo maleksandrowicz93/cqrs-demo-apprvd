@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.github.maleksandrowicz93</groupId>
         <artifactId>cqrs-demo</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>app</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>app</name>
     <description>Application layer - Demo project showing cqrs with hexagonal architecture</description>
 
@@ -19,12 +19,10 @@
         <dependency>
             <groupId>com.github.maleksandrowicz93</groupId>
             <artifactId>shared</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.maleksandrowicz93</groupId>
             <artifactId>domain</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!--        TESTS-->
@@ -59,6 +57,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>sr</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -66,29 +69,20 @@
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
-                            <includes>
-                                <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentUtils.*
-                                </include>
-                                <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.Students.*
-                                </include>
-                                <include>
-                                    com.github.maleksandrowicz93.cqrsdemo.student.StudentFactory.*
-                                </include>
-                            </includes>
+                            <excludes>
+                                <exclude>
+                                    **/student/StubFactory.*
+                                </exclude>
+                                <exclude>
+                                    **/student/StudentFacadeSpec.*
+                                </exclude>
+                                <exclude>
+                                    **/student/StudentQueriesDispatcherSpec.*
+                                </exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Spec.*</include>
-                    </includes>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>

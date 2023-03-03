@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.github.maleksandrowicz93</groupId>
         <artifactId>cqrs-demo</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>domain</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>domain</name>
     <description>Domain - Demo project showing cqrs with hexagonal architecture</description>
 
@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.github.maleksandrowicz93</groupId>
             <artifactId>shared</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
         <!--        External-->
