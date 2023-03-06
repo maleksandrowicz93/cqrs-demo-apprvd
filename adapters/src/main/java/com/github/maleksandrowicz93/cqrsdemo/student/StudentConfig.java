@@ -34,7 +34,8 @@ class StudentConfig {
             AddStudentCommandHandler addStudentCommandHandler,
             EditStudentDataCommandHandler editStudentDataCommandHandler,
             UpdatePasswordCommandHandler updatePasswordCommandHandler,
-            DeleteStudentCommandHandler deleteStudentCommandHandler) {
+            DeleteStudentCommandHandler deleteStudentCommandHandler
+    ) {
         return factory.studentFacade(addStudentCommandHandler,
                 editStudentDataCommandHandler,
                 updatePasswordCommandHandler,
@@ -44,7 +45,8 @@ class StudentConfig {
     @Bean
     AddStudentCommandHandler addStudentCommandHandler(
             StudentServicesFactory factory,
-            ApiResultFactory<StudentData> studentDataApiResultFactory) {
+            ApiResultFactory<StudentData> studentDataApiResultFactory
+    ) {
         return factory.addStudentCommandHandler(studentDataApiResultFactory);
     }
 
@@ -56,14 +58,16 @@ class StudentConfig {
     @Bean
     EditStudentDataCommandHandler editStudentDataCommandHandler(
             StudentServicesFactory factory,
-            ApiResultFactory<StudentData> studentDataApiResultFactory) {
+            ApiResultFactory<StudentData> studentDataApiResultFactory
+    ) {
         return factory.editStudentDataCommandHandler(studentDataApiResultFactory);
     }
 
     @Bean
     UpdatePasswordCommandHandler updatePasswordCommandHandler(
             StudentServicesFactory factory,
-            ApiResultFactory<StudentIdentification> studentIdentificationApiResultFactory) {
+            ApiResultFactory<StudentIdentification> studentIdentificationApiResultFactory
+    ) {
         return factory.updatePasswordCommandHandler(studentIdentificationApiResultFactory);
     }
 

@@ -34,11 +34,11 @@ class UpdatePasswordCommandHandler {
     }
 
     private ApiResult<StudentIdentification> updatePassword(StudentSnapshot snapshot, String password) {
-        Student student = Student.fromSnapshot(snapshot);
-        String encodedPassword = securityService.encodePassword(password);
+        var student = Student.fromSnapshot(snapshot);
+        var encodedPassword = securityService.encodePassword(password);
         student.updatePassword(encodedPassword);
-        StudentSnapshot savedStudent = studentWriteRepository.save(student.createSnapshot());
-        StudentIdentification studentIdentification = studentMapper.toStudentIdentification(savedStudent);
+        var savedStudent = studentWriteRepository.save(student.createSnapshot());
+        var studentIdentification = studentMapper.toStudentIdentification(savedStudent);
         return resultFactory.create(studentIdentification);
     }
 }

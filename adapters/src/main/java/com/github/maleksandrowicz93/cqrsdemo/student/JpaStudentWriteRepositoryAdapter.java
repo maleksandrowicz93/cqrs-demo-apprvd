@@ -16,8 +16,8 @@ class JpaStudentWriteRepositoryAdapter implements StudentWriteRepository {
 
     @Override
     public StudentSnapshot save(StudentSnapshot student) {
-        StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
-        StudentEntity savedStudent = jpaStudentWriteRepository.save(studentEntity);
+        var studentEntity = studentEntityMapper.toStudentEntity(student);
+        var savedStudent = jpaStudentWriteRepository.save(studentEntity);
         return studentEntityMapper.toStudent(savedStudent);
     }
 

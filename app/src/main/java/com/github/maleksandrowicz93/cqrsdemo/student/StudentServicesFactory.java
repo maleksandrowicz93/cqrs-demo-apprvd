@@ -39,7 +39,8 @@ class StudentServicesFactory {
             AddStudentCommandHandler addStudentCommandHandler,
             EditStudentDataCommandHandler editStudentDataCommandHandler,
             UpdatePasswordCommandHandler updatePasswordCommandHandler,
-            DeleteStudentCommandHandler deleteStudentCommandHandler) {
+            DeleteStudentCommandHandler deleteStudentCommandHandler
+    ) {
         return new StudentFacade(addStudentCommandHandler,
                 editStudentDataCommandHandler,
                 updatePasswordCommandHandler,
@@ -62,8 +63,7 @@ class StudentServicesFactory {
         return new DeleteStudentCommandHandler(studentQueryRepository, studentWriteRepository);
     }
 
-    AddStudentCommandHandler addStudentCommandHandler(
-            ApiResultFactory<StudentData> studentDataApiResultFactory) {
+    AddStudentCommandHandler addStudentCommandHandler(ApiResultFactory<StudentData> studentDataApiResultFactory) {
         return new AddStudentCommandHandler(studentQueryRepository,
                 studentWriteRepository,
                 studentMapper,

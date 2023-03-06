@@ -2,7 +2,6 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentData;
-import com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultProperty;
 import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -36,18 +35,18 @@ class AddStudentCommandHandler {
     private ApiResult<StudentData> tryToAddStudent(StudentSnapshot snapshot) {
         return studentQueryRepository.findStudentIdByEmail(snapshot.email())
                 .map(id -> {
-                    Map<ResultProperty, String> properties = Map.of(CONFLICTED_ID, id.toString());
+                    var properties = Map.of(CONFLICTED_ID, id.toString());
                     return resultFactory.create(STUDENT_ALREADY_EXISTS, properties);
                 })
                 .orElseGet(() -> addStudent(snapshot));
     }
 
     private ApiResult<StudentData> addStudent(StudentSnapshot snapshot) {
-        Student student = Student.fromSnapshot(snapshot);
-        String encodedPassword = securityService.encodePassword(snapshot.password());
+        var student = Student.fromSnapshot(snapshot);
+        var encodedPassword = securityService.encodePassword(snapshot.password());
         student.updatePassword(encodedPassword);
-        StudentSnapshot savedStudent = studentWriteRepository.save(student.createSnapshot());
-        StudentData studentData = studentMapper.toStudentData(savedStudent);
+        var savedStudent = studentWriteRepository.save(student.createSnapshot());
+        var studentData = studentMapper.toStudentData(savedStudent);
         return resultFactory.create(studentData);
     }
 }

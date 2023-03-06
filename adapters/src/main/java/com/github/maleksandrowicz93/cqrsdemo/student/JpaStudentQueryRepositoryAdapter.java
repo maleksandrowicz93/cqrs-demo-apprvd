@@ -27,7 +27,7 @@ class JpaStudentQueryRepositoryAdapter implements StudentQueryRepository {
     @Override
     public ResultPage<StudentSnapshot> findAll(int page, int size) {
         var pageRequest = getPageRequest(page, size);
-        Page<StudentSnapshot> studentPage = jpaStudentQueryRepository.findAll(pageRequest)
+        var studentPage = jpaStudentQueryRepository.findAll(pageRequest)
                 .map(studentEntityMapper::toStudent);
         return new ResultPage<>(studentPage.getTotalPages(), studentPage.getContent());
     }

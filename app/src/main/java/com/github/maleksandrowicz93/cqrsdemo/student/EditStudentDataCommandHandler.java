@@ -36,9 +36,9 @@ class EditStudentDataCommandHandler {
     }
 
     private ApiResult<StudentData> editStudent(StudentSnapshot newDataSnapshot, StudentSnapshot dbSnapshot) {
-        Student student = Student.fromSnapshot(dbSnapshot);
+        var student = Student.fromSnapshot(dbSnapshot);
         student.editData(newDataSnapshot);
-        String encodedPassword = securityService.encodePassword(newDataSnapshot.password());
+        var encodedPassword = securityService.encodePassword(newDataSnapshot.password());
         student.updatePassword(encodedPassword);
         var savedStudent = studentWriteRepository.save(student.createSnapshot());
         var studentData = studentMapper.toStudentData(savedStudent);

@@ -17,13 +17,13 @@ class StudentEntityMapperAdapter implements StudentMapper {
 
     @Override
     public StudentIdentification toStudentIdentification(StudentSnapshot student) {
-        StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
+        var studentEntity = studentEntityMapper.toStudentEntity(student);
         return studentEntityMapper.toStudentIdentification(studentEntity);
     }
 
     @Override
     public StudentData toStudentData(StudentSnapshot student) {
-        StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
+        var studentEntity = studentEntityMapper.toStudentEntity(student);
         return studentEntityMapper.toStudentData(studentEntity);
     }
 
