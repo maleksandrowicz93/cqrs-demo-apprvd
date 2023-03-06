@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,7 +33,6 @@ class StudentController implements StudentApi {
     Environment environment;
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentPage> findAllStudents(Integer page, Integer size) {
         var resultPage = studentQueriesDispatcher.findAllStudents(page, size);
         var studentPage = restModelMapper.toStudentPage(resultPage);
@@ -42,7 +40,6 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> addStudent(SaveStudentRequest saveStudentRequest) {
         var command = restModelMapper.toAddStudentCommand(saveStudentRequest);
         var result = studentFacade.addStudent(command);
@@ -77,7 +74,6 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> findStudent(UUID id) {
         return studentQueriesDispatcher.findStudentById(id)
                 .map(restModelMapper::toStudentDto)
@@ -86,7 +82,6 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentDto> editStudent(UUID id, SaveStudentRequest saveStudentRequest) {
         var command = restModelMapper.toEditStudentCommand(id, saveStudentRequest);
         var result = studentFacade.editStudentData(command);
@@ -97,7 +92,6 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<StudentIdDto> updatePassword(UUID id, String body) {
         var command = restModelMapper.toUpdatePasswordCommand(id, body);
         var result = studentFacade.updatePassword(command);
@@ -108,7 +102,6 @@ class StudentController implements StudentApi {
     }
 
     @Override
-    @CrossOrigin(origins = AllowedOrigin.FRONT_END)
     public ResponseEntity<Void> deleteStudent(UUID id) {
         var command = restModelMapper.toDeleteStudentCommand(id);
         studentFacade.deleteStudent(command);
