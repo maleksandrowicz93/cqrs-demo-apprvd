@@ -29,7 +29,8 @@ class AddStudentCommandHandler {
 
     ApiResult<StudentData> handle(AddStudentCommand command) {
         var snapshot = studentMapper.toStudent(command);
-        return Try.of(() -> tryToSaveStudent(snapshot))
+        return Try.run(() -> Student.validateSnapshot(snapshot))
+                .map(success -> tryToSaveStudent(snapshot))
                 .onFailure(InvalidCredentialsException.class, e -> log.error(e.getMessage()))
                 .getOrElse(() -> resultFactory.create(INVALID_CREDENTIALS));
     }

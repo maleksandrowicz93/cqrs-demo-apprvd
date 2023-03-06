@@ -3,11 +3,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -37,7 +33,7 @@ class Student {
                 .build();
     }
 
-    private static void validateSnapshot(StudentSnapshot snapshot) {
+    static void validateSnapshot(StudentSnapshot snapshot) {
         if (StringUtils.isBlank(snapshot.email())) {
             throw new InvalidCredentialsException("Email should not be blank.");
         }
