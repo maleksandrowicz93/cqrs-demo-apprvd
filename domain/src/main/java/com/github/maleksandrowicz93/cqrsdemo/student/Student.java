@@ -1,6 +1,5 @@
 package com.github.maleksandrowicz93.cqrsdemo.student;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.ToString;
@@ -9,9 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @ToString
-@Builder(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(access = PRIVATE)
+@AllArgsConstructor(access = PRIVATE)
 class Student {
 
     UUID id;

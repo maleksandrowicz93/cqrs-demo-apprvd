@@ -9,8 +9,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.INVALID_CREDENTIALS;
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.STUDENT_ALREADY_EXISTS;
@@ -30,21 +28,21 @@ class AddStudentCommandHandler {
     ApiResult<StudentData> handle(AddStudentCommand command) {
         var snapshot = studentMapper.toStudent(command);
         return Try.run(() -> Student.validateSnapshot(snapshot))
-                .map(success -> tryToSaveStudent(snapshot))
+                .map(success -> tryToAddStudent(snapshot))
                 .onFailure(InvalidCredentialsException.class, e -> log.error(e.getMessage()))
                 .getOrElse(() -> resultFactory.create(INVALID_CREDENTIALS));
     }
 
-    private ApiResult<StudentData> tryToSaveStudent(StudentSnapshot snapshot) {
-        Optional<UUID> id = studentQueryRepository.findStudentIdByEmail(snapshot.email());
-        if (id.isPresent()) {
-            Map<ResultProperty, String> properties = Map.of(CONFLICTED_ID, id.get().toString());
-            return resultFactory.create(STUDENT_ALREADY_EXISTS, properties);
-        }
-        return saveStudent(snapshot);
+    private ApiResult<StudentData> tryToAddStudent(StudentSnapshot snapshot) {
+        return studentQueryRepository.findStudentIdByEmail(snapshot.email())
+                .map(id -> {
+                    Map<ResultProperty, String> properties = Map.of(CONFLICTED_ID, id.toString());
+                    return resultFactory.create(STUDENT_ALREADY_EXISTS, properties);
+                })
+                .orElseGet(() -> addStudent(snapshot));
     }
 
-    private ApiResult<StudentData> saveStudent(StudentSnapshot snapshot) {
+    private ApiResult<StudentData> addStudent(StudentSnapshot snapshot) {
         Student student = Student.fromSnapshot(snapshot);
         String encodedPassword = securityService.encodePassword(snapshot.password());
         student.updatePassword(encodedPassword);

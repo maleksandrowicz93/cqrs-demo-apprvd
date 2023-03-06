@@ -27,7 +27,7 @@ class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @UuidGenerator(style = UuidGenerator.Style.RANDOM)
+    @UuidGenerator
     UUID id;
     @Column(unique = true, nullable = false)
     String email;
