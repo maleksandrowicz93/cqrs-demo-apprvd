@@ -45,9 +45,9 @@ enum Students implements StudentFactory {
         this.birthDate = birthDate
     }
 
-    static StudentFactory from(Student student) {
+    static StudentFactory from(String email) {
         for (Students s : values()) {
-            if (s.email == student.email()) {
+            if (s.email == email) {
                 return s;
             }
         }
@@ -55,13 +55,13 @@ enum Students implements StudentFactory {
     }
 
     @Override
-    Student studentToAdd() {
+    StudentSnapshot studentToAdd() {
         addedStudent(null)
     }
 
     @Override
-    Student addedStudent(UUID id) {
-        Student.builder()
+    StudentSnapshot addedStudent(UUID id) {
+        StudentSnapshot.builder()
                 .id(id)
                 .email(email)
                 .firstName(firstName)

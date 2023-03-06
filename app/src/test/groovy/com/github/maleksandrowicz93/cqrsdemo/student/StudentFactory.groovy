@@ -10,8 +10,8 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.UpdatePasswordCommand
 
 interface StudentFactory {
 
-    Student studentToAdd()
-    Student addedStudent(UUID id)
+    StudentSnapshot studentToAdd()
+    StudentSnapshot addedStudent(UUID id)
     AddStudentCommand addStudentCommand()
     EditStudentCommand editStudentCommand(UUID id)
     UpdatePasswordCommand updatePasswordCommand(UUID id)

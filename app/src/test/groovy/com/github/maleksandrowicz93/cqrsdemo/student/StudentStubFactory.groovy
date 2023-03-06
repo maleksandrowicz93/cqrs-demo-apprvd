@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.cqrsdemo.student
 
 import com.github.maleksandrowicz93.cqrsdemo.TestUtils
+import com.github.maleksandrowicz93.cqrsdemo.student.dto.AddStudentCommand
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand
 import spock.lang.Specification
 
@@ -10,24 +11,76 @@ class StudentStubFactory extends Specification {
 
     StudentMapper studentMapper() {
         Stub(StudentMapper) {
-            def firstStudent = Students.FIRST
-            def secondStudent = Students.SECOND
-            toStudent(firstStudent.addStudentCommand()) >> firstStudent.studentToAdd()
-            toStudent(secondStudent.addStudentCommand()) >> secondStudent.studentToAdd()
-            toStudent(_ as EditStudentCommand) >> { EditStudentCommand command -> secondStudent.addedStudent(command.id()) }
-            toStudentData(_ as Student) >> { Student student ->
+            toStudent(_ as AddStudentCommand) >> { AddStudentCommand command ->
+                return buildMockStudentFrom(command)
+            }
+            toStudent(_ as EditStudentCommand) >> { EditStudentCommand command ->
+                return buildMockStudentFrom(command)
+            }
+            toStudentData(_ as StudentSnapshot) >> { StudentSnapshot student ->
                 {
-                    def studentFactory = Students.from(student)
+                    def studentFactory = Students.from(student.email())
                     studentFactory.studentData(student.id())
                 }
             }
-            toStudentIdentification(_ as Student) >> { Student student ->
+            toStudentIdentification(_ as StudentSnapshot) >> { StudentSnapshot student ->
                 {
-                    def studentFactory = Students.from(student)
+                    def studentFactory = Students.from(student.email())
                     studentFactory.studentIdentification(student.id())
                 }
             }
         }
+    }
+
+    private StudentSnapshot buildMockStudentFrom(AddStudentCommand command) {
+        if (command.email() == null) {
+            return StudentSnapshot.builder().build()
+        }
+        if (command.email().isBlank()) {
+            return StudentSnapshot.builder()
+                    .email(" ")
+                    .build()
+        }
+        def studentFactory = Students.from(command.email())
+        def student = studentFactory.studentToAdd()
+        if (command.password() == null) {
+            return student.toBuilder()
+                    .password(null)
+                    .build()
+        }
+        if (command.password().isBlank()) {
+            return student.toBuilder()
+                    .password(" ")
+                    .build()
+        }
+        return student
+    }
+
+    private StudentSnapshot buildMockStudentFrom(EditStudentCommand command) {
+        if (command.email() == null) {
+            return StudentSnapshot.builder()
+                    .id(command.id())
+                    .build()
+        }
+        if (command.email().isBlank()) {
+            return StudentSnapshot.builder()
+                    .id(command.id())
+                    .email(" ")
+                    .build()
+        }
+        def studentFactory = Students.from(command.email())
+        def student = studentFactory.addedStudent(command.id())
+        if (command.password() == null) {
+            return student.toBuilder()
+                    .password(null)
+                    .build()
+        }
+        if (command.password().isBlank()) {
+            return student.toBuilder()
+                    .password(" ")
+                    .build()
+        }
+        return student
     }
 
     SecurityService securityService() {
