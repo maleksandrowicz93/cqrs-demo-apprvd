@@ -3,6 +3,7 @@ package com.github.maleksandrowicz93.cqrsdemo.student
 import com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode
 import com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultProperty
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class StudentFacadeSpec extends Specification {
 
@@ -44,60 +45,26 @@ class StudentFacadeSpec extends Specification {
         result.property(ResultProperty.CONFLICTED_ID) == existingStudent.id().toString()
     }
 
-    def "should not add student when no email"() {
-        given: "a new student data with no email"
-        def request = Students.FIRST.addStudentCommand().toBuilder()
-                .email(null)
-                .build()
-
-        when: "user tries to add this student"
-        def result = facade.addStudent(request)
+    @Unroll("email: #command.email(), password: #command.password()")
+    def "should not add student when incorrect credentials"() {
+        when: "user tries to add student"
+        def result = facade.addStudent(command)
 
         then: "no student should be created"
         result.value().isEmpty()
         result.code() == ResultCode.INVALID_CREDENTIALS
+
+        where: "student's credentials are invalid"
+        command << [
+                addStudentCommandBuilder().email(null).build(),
+                addStudentCommandBuilder().email(" ").build(),
+                addStudentCommandBuilder().password(null).build(),
+                addStudentCommandBuilder().password(" ").build()
+        ]
     }
 
-    def "should not add student when empty email"() {
-        given: "a new student data with empty email"
-        def request = Students.FIRST.addStudentCommand().toBuilder()
-                .email(" ")
-                .build()
-
-        when: "user tries to add this student"
-        def result = facade.addStudent(request)
-
-        then: "no student should be created"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
-    }
-
-    def "should not add student when no password"() {
-        given: "a new student data with no password"
-        def request = Students.FIRST.addStudentCommand().toBuilder()
-                .password(null)
-                .build()
-
-        when: "user tries to add this student"
-        def result = facade.addStudent(request)
-
-        then: "no student should be created"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
-    }
-
-    def "should not add student when empty password"() {
-        given: "a new student data with empty password"
-        def request = Students.FIRST.addStudentCommand().toBuilder()
-                .password(" ")
-                .build()
-
-        when: "user tries to add this student"
-        def result = facade.addStudent(request)
-
-        then: "no student should be created"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
+    private def addStudentCommandBuilder() {
+        Students.FIRST.addStudentCommand().toBuilder()
     }
 
     def "edit student"() {
@@ -128,14 +95,10 @@ class StudentFacadeSpec extends Specification {
         result.code() == ResultCode.STUDENT_NOT_FOUND
     }
 
-    def "should not edit student when no email"() {
+    @Unroll("email: #command.email(), password: #command.password()")
+    def "should not edit student when incorrect credentials"() {
         given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "user fill data to update with no email"
-        def command = Students.SECOND.editStudentCommand(student.id()).toBuilder()
-                .email(null)
-                .build()
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to edit student's data"
         def result = facade.editStudentData(command)
@@ -143,57 +106,18 @@ class StudentFacadeSpec extends Specification {
         then: "no updated data should be get"
         result.value().isEmpty()
         result.code() == ResultCode.INVALID_CREDENTIALS
+
+        where: "student's credentials are invalid"
+        command << [
+                editStudentCommandBuilder().email(null).build(),
+                editStudentCommandBuilder().email(" ").build(),
+                editStudentCommandBuilder().password(null).build(),
+                editStudentCommandBuilder().password(" ").build()
+        ]
     }
 
-    def "should not edit student when empty email"() {
-        given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "user fill data to update with empty email"
-        def command = Students.SECOND.editStudentCommand(student.id()).toBuilder()
-                .email(" ")
-                .build()
-
-        when: "user tries to edit student's data"
-        def result = facade.editStudentData(command)
-
-        then: "no updated data should be get"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
-    }
-
-    def "should not edit student when no password"() {
-        given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "user fill data to update with no password"
-        def command = Students.SECOND.editStudentCommand(student.id()).toBuilder()
-                .password(null)
-                .build()
-
-        when: "user tries to edit student's data"
-        def result = facade.editStudentData(command)
-
-        then: "no updated data should be get"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
-    }
-
-    def "should not edit student when empty password"() {
-        given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "user fill data to update with empty password"
-        def command = Students.SECOND.editStudentCommand(student.id()).toBuilder()
-                .password(" ")
-                .build()
-
-        when: "user tries to edit student's data"
-        def result = facade.editStudentData(command)
-
-        then: "no updated data should be get"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
+    private def editStudentCommandBuilder() {
+        Students.FIRST.editStudentCommand(UUID.randomUUID()).toBuilder()
     }
 
     def "update password"() {
@@ -226,14 +150,10 @@ class StudentFacadeSpec extends Specification {
         result.code() == ResultCode.STUDENT_NOT_FOUND
     }
 
-    def "should not update password when no password"() {
+    @Unroll("password: #command.password()")
+    def "should not update password when incorrect password"() {
         given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "student fills new password with no text"
-        def command = Students.SECOND.updatePasswordCommand(student.id()).toBuilder()
-                .password(null)
-                .build()
+        studentWriteRepository.save(Students.FIRST.studentToAdd())
 
         when: "user tries to update a student's password"
         def result = facade.updatePassword(command)
@@ -241,23 +161,16 @@ class StudentFacadeSpec extends Specification {
         then: "password should not be updated"
         result.value().isEmpty()
         result.code() == ResultCode.INVALID_CREDENTIALS
+
+        where: "new password is incorrect"
+        command << [
+                updatePasswordCommandBuilder().password(null).build(),
+                updatePasswordCommandBuilder().password(" ").build()
+        ]
     }
 
-    def "should not update password when empty password"() {
-        given: "a student exists in db"
-        def student = studentWriteRepository.save(Students.FIRST.studentToAdd())
-
-        and: "student fills new password with empty text"
-        def command = Students.SECOND.updatePasswordCommand(student.id()).toBuilder()
-                .password(" ")
-                .build()
-
-        when: "user tries to update a student's password"
-        def result = facade.updatePassword(command)
-
-        then: "password should not be updated"
-        result.value().isEmpty()
-        result.code() == ResultCode.INVALID_CREDENTIALS
+    private def updatePasswordCommandBuilder() {
+        Students.FIRST.updatePasswordCommand(UUID.randomUUID()).toBuilder()
     }
 
     def "delete student"() {
