@@ -8,17 +8,17 @@ import java.util.Map;
 abstract class BasicApiResultFactory<T> implements ApiResultFactory<T> {
 
     @Override
-    public ApiResult<T> create(ResultCode code) {
+    public ApiResult<T> create(T value) {
         return ApiResult.<T>builder()
-                .code(code)
+                .code(ResultCode.OK)
+                .value(value)
                 .build();
     }
 
     @Override
-    public ApiResult<T> create(ResultCode code, T value) {
+    public ApiResult<T> create(ResultCode code) {
         return ApiResult.<T>builder()
                 .code(code)
-                .value(value)
                 .build();
     }
 

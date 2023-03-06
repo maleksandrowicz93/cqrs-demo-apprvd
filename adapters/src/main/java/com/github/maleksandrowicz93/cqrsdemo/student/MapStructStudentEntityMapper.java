@@ -30,7 +30,7 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     @Mapping(target = "firstName", expression = "java(command.firstName())")
     @Mapping(target = "lastName", expression = "java(command.lastName())")
     @Mapping(target = "birthDate", expression = "java(command.birthDate())")
-    Student toStudent(AddStudentCommand command);
+    StudentSnapshot toStudent(AddStudentCommand command);
 
     @Override
     @Mapping(target = "id", expression = "java(command.id())")
@@ -39,7 +39,7 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     @Mapping(target = "firstName", expression = "java(command.firstName())")
     @Mapping(target = "lastName", expression = "java(command.lastName())")
     @Mapping(target = "birthDate", expression = "java(command.birthDate())")
-    Student toStudent(EditStudentCommand command);
+    StudentSnapshot toStudent(EditStudentCommand command);
 
     @Override
     @Mapping(target = "id", expression = "java(student.id())")
@@ -48,7 +48,7 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     @Mapping(target = "firstName", expression = "java(student.firstName())")
     @Mapping(target = "lastName", expression = "java(student.lastName())")
     @Mapping(target = "birthDate", expression = "java(student.birthDate())")
-    Student toStudent(StudentEntity student);
+    StudentSnapshot toStudent(StudentEntity student);
 
     @Override
     @Mapping(target = "id", expression = "java(student.id())")
@@ -57,5 +57,5 @@ interface MapStructStudentEntityMapper extends StudentEntityMapper {
     @Mapping(target = "firstName", expression = "java(student.firstName())")
     @Mapping(target = "lastName", expression = "java(student.lastName())")
     @Mapping(target = "birthDate", expression = "java(student.birthDate())")
-    StudentEntity toStudentEntity(Student student);
+    StudentEntity toStudentEntity(StudentSnapshot student);
 }

@@ -4,5 +4,5 @@ import com.github.maleksandrowicz93.cqrsdemo.repository.WriteRepository;
 
 import java.util.UUID;
 
-interface StudentWriteRepository extends WriteRepository<Student, UUID> {
+interface StudentWriteRepository extends WriteRepository<StudentSnapshot, UUID> {
 }

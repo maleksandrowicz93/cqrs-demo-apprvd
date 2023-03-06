@@ -7,8 +7,8 @@ import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentIdentification;
 
 interface StudentMapper {
 
-    StudentIdentification toStudentIdentification(Student student);
-    StudentData toStudentData(Student student);
-    Student toStudent(AddStudentCommand command);
-    Student toStudent(EditStudentCommand command);
+    StudentIdentification toStudentIdentification(StudentSnapshot student);
+    StudentData toStudentData(StudentSnapshot student);
+    StudentSnapshot toStudent(AddStudentCommand command);
+    StudentSnapshot toStudent(EditStudentCommand command);
 }

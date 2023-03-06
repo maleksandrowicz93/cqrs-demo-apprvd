@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.INVALID_CREDENTIALS;
-import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.OK;
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.STUDENT_NOT_FOUND;
 
 @Slf4j
@@ -30,10 +29,16 @@ class UpdatePasswordCommandHandler {
             return resultFactory.create(INVALID_CREDENTIALS);
         }
         return studentQueryRepository.findById(id)
-                .map(student -> student.password(securityService.encodePassword(password)))
-                .map(studentWriteRepository::save)
-                .map(studentMapper::toStudentIdentification)
-                .map(student -> resultFactory.create(OK, student))
+                .map(snapshot -> updatePassword(snapshot, password))
                 .orElseGet(() -> resultFactory.create(STUDENT_NOT_FOUND));
+    }
+
+    private ApiResult<StudentIdentification> updatePassword(StudentSnapshot snapshot, String password) {
+        Student student = Student.fromSnapshot(snapshot);
+        String encodedPassword = securityService.encodePassword(password);
+        student.updatePassword(encodedPassword);
+        StudentSnapshot savedStudent = studentWriteRepository.save(student.createSnapshot());
+        StudentIdentification studentIdentification = studentMapper.toStudentIdentification(savedStudent);
+        return resultFactory.create(studentIdentification);
     }
 }

@@ -9,8 +9,8 @@ interface StudentEntityMapper {
 
     StudentIdentification toStudentIdentification(StudentEntity student);
     StudentData toStudentData(StudentEntity student);
-    Student toStudent(AddStudentCommand command);
-    Student toStudent(EditStudentCommand command);
-    Student toStudent(StudentEntity student);
-    StudentEntity toStudentEntity(Student student);
+    StudentSnapshot toStudent(AddStudentCommand command);
+    StudentSnapshot toStudent(EditStudentCommand command);
+    StudentSnapshot toStudent(StudentEntity student);
+    StudentEntity toStudentEntity(StudentSnapshot student);
 }

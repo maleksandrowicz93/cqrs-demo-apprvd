@@ -25,9 +25,9 @@ class JpaStudentQueryRepositoryAdapter implements StudentQueryRepository {
     }
 
     @Override
-    public ResultPage<Student> findAll(int page, int size) {
+    public ResultPage<StudentSnapshot> findAll(int page, int size) {
         var pageRequest = getPageRequest(page, size);
-        Page<Student> studentPage = jpaStudentQueryRepository.findAll(pageRequest)
+        Page<StudentSnapshot> studentPage = jpaStudentQueryRepository.findAll(pageRequest)
                 .map(studentEntityMapper::toStudent);
         return new ResultPage<>(studentPage.getTotalPages(), studentPage.getContent());
     }
@@ -41,7 +41,7 @@ class JpaStudentQueryRepositoryAdapter implements StudentQueryRepository {
     }
 
     @Override
-    public Optional<Student> findById(UUID id) {
+    public Optional<StudentSnapshot> findById(UUID id) {
         return jpaStudentQueryRepository.findById(id)
                 .map(studentEntityMapper::toStudent);
     }

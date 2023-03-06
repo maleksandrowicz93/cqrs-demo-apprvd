@@ -16,24 +16,24 @@ class StudentEntityMapperAdapter implements StudentMapper {
     StudentEntityMapper studentEntityMapper;
 
     @Override
-    public StudentIdentification toStudentIdentification(Student student) {
+    public StudentIdentification toStudentIdentification(StudentSnapshot student) {
         StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
         return studentEntityMapper.toStudentIdentification(studentEntity);
     }
 
     @Override
-    public StudentData toStudentData(Student student) {
+    public StudentData toStudentData(StudentSnapshot student) {
         StudentEntity studentEntity = studentEntityMapper.toStudentEntity(student);
         return studentEntityMapper.toStudentData(studentEntity);
     }
 
     @Override
-    public Student toStudent(AddStudentCommand command) {
+    public StudentSnapshot toStudent(AddStudentCommand command) {
         return studentEntityMapper.toStudent(command);
     }
 
     @Override
-    public Student toStudent(EditStudentCommand command) {
+    public StudentSnapshot toStudent(EditStudentCommand command) {
         return studentEntityMapper.toStudent(command);
     }
 }

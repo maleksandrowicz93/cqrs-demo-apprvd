@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @FieldDefaults(makeFinal = true)
 class InMemoryStudentRepository implements StudentWriteRepository, StudentQueryRepository {
-    Map<UUID, Student> students = new HashMap<>();
+    Map<UUID, StudentSnapshot> students = new HashMap<>();
 
     @Override
     public Optional<UUID> findStudentIdByEmail(String email) {
@@ -28,12 +28,12 @@ class InMemoryStudentRepository implements StudentWriteRepository, StudentQueryR
     }
 
     @Override
-    public ResultPage<Student> findAll(int page, int size) {
+    public ResultPage<StudentSnapshot> findAll(int page, int size) {
         var totalPages = students.size() / size;
         var skipValue = page * size;
         var limitValue = skipValue + size;
-        List<Student> studentList = students.values().stream()
-                .sorted(Comparator.comparing(Student::email))
+        List<StudentSnapshot> studentList = students.values().stream()
+                .sorted(Comparator.comparing(StudentSnapshot::email))
                 .skip(skipValue)
                 .limit(limitValue)
                 .toList();
@@ -41,17 +41,17 @@ class InMemoryStudentRepository implements StudentWriteRepository, StudentQueryR
     }
 
     @Override
-    public Optional<Student> findById(UUID uuid) {
+    public Optional<StudentSnapshot> findById(UUID uuid) {
         return Optional.ofNullable(students.get(uuid));
     }
 
     @Override
-    public Student save(Student entity) {
-        if (entity.id() == null) {
-            entity.id(UUID.randomUUID());
-        }
-        students.put(entity.id(), entity);
-        return students.get(entity.id());
+    public StudentSnapshot save(StudentSnapshot snapshot) {
+        var snapshotWIthId = snapshot.id() == null
+                ? snapshot.toBuilder().id(UUID.randomUUID()).build()
+                : snapshot;
+        students.put(snapshotWIthId.id(), snapshotWIthId);
+        return students.get(snapshotWIthId.id());
     }
 
     @Override

@@ -2,13 +2,12 @@ package com.github.maleksandrowicz93.cqrsdemo.student;
 
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.EditStudentCommand;
 import com.github.maleksandrowicz93.cqrsdemo.student.dto.StudentData;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.INVALID_CREDENTIALS;
-import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.OK;
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.STUDENT_NOT_FOUND;
 
 @Slf4j
@@ -23,24 +22,25 @@ class EditStudentDataCommandHandler {
     SecurityService securityService;
 
     ApiResult<StudentData> handle(EditStudentCommand command) {
-        var id = command.id();
-        var email = command.email();
-        if (StringUtils.isBlank(email)) {
-            log.error("Email should not be blank.");
-            return resultFactory.create(INVALID_CREDENTIALS);
-        }
-        if (StringUtils.isBlank(command.password())) {
-            log.error("Password passed by {} should not be blank.", email);
-            return resultFactory.create(INVALID_CREDENTIALS);
-        }
-        if (!studentQueryRepository.existsById(id)) {
+        var snapshot = studentMapper.toStudent(command);
+        return Try.of(() -> tryToEditStudent(snapshot))
+                .onFailure(InvalidCredentialsException.class, e -> log.error(e.getMessage()))
+                .getOrElse(() -> resultFactory.create(INVALID_CREDENTIALS));
+    }
+
+    private ApiResult<StudentData> tryToEditStudent(StudentSnapshot snapshot) {
+        if (!studentQueryRepository.existsById(snapshot.id())) {
             return resultFactory.create(STUDENT_NOT_FOUND);
         }
-        var student = studentMapper.toStudent(command)
-                .id(id)
-                .password(securityService.encodePassword(command.password()));
-        var savedStudent = studentWriteRepository.save(student);
-        var StudentData = studentMapper.toStudentData(savedStudent);
-        return resultFactory.create(OK, StudentData);
+        return editStudent(snapshot);
+    }
+
+    private ApiResult<StudentData> editStudent(StudentSnapshot snapshot) {
+        Student student = Student.fromSnapshot(snapshot);
+        String encodedPassword = securityService.encodePassword(snapshot.password());
+        student.updatePassword(encodedPassword);
+        var savedStudent = studentWriteRepository.save(student.createSnapshot());
+        var studentData = studentMapper.toStudentData(savedStudent);
+        return resultFactory.create(studentData);
     }
 }
