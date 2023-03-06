@@ -22,23 +22,23 @@ class EditStudentDataCommandHandler {
     SecurityService securityService;
 
     ApiResult<StudentData> handle(EditStudentCommand command) {
-        var snapshot = studentMapper.toStudent(command);
-        return Try.run(() -> Student.validateSnapshot(snapshot))
-                .map(success -> tryToEditStudent(snapshot))
+        var newDataSnapshot = studentMapper.toStudent(command);
+        return Try.run(() -> Student.validateSnapshot(newDataSnapshot))
+                .map(success -> tryToEditStudent(newDataSnapshot))
                 .onFailure(InvalidCredentialsException.class, e -> log.error(e.getMessage()))
                 .getOrElse(() -> resultFactory.create(INVALID_CREDENTIALS));
     }
 
-    private ApiResult<StudentData> tryToEditStudent(StudentSnapshot snapshot) {
-        if (!studentQueryRepository.existsById(snapshot.id())) {
-            return resultFactory.create(STUDENT_NOT_FOUND);
-        }
-        return editStudent(snapshot);
+    private ApiResult<StudentData> tryToEditStudent(StudentSnapshot newDataSnapshot) {
+        return studentQueryRepository.findById(newDataSnapshot.id())
+                .map(dbSnapshot -> editStudent(newDataSnapshot, dbSnapshot))
+                .orElseGet(() -> resultFactory.create(STUDENT_NOT_FOUND));
     }
 
-    private ApiResult<StudentData> editStudent(StudentSnapshot snapshot) {
-        Student student = Student.fromSnapshot(snapshot);
-        String encodedPassword = securityService.encodePassword(snapshot.password());
+    private ApiResult<StudentData> editStudent(StudentSnapshot newDataSnapshot, StudentSnapshot dbSnapshot) {
+        Student student = Student.fromSnapshot(dbSnapshot);
+        student.editData(newDataSnapshot);
+        String encodedPassword = securityService.encodePassword(newDataSnapshot.password());
         student.updatePassword(encodedPassword);
         var savedStudent = studentWriteRepository.save(student.createSnapshot());
         var studentData = studentMapper.toStudentData(savedStudent);
