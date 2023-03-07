@@ -14,4 +14,15 @@ public record EditStudentCommand(
         String lastName,
         LocalDate birthDate
 ) {
+
+    @Override
+    public String toString() {
+        return "EditStudentCommand[" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ']';
+    }
 }

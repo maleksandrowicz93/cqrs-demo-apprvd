@@ -14,8 +14,13 @@ class DeleteStudentCommandHandler {
     StudentWriteRepository studentWriteRepository;
 
     void handle(DeleteStudentCommand command) {
-        if (studentQueryRepository.existsById(command.id())) {
-            studentWriteRepository.deleteById(command.id());
+        log.info("Handling; {}", command);
+        var id = command.id();
+        if (studentQueryRepository.existsById(id)) {
+            studentWriteRepository.deleteById(id);
+            log.info("Student with id {} successfully deleted", id);
+        } else {
+            log.error("Cannot delete student with id {}, because not found", id);
         }
     }
 }

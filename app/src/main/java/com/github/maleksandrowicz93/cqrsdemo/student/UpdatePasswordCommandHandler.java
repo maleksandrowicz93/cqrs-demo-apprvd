@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.UUID;
+
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.INVALID_CREDENTIALS;
 import static com.github.maleksandrowicz93.cqrsdemo.student.enums.ResultCode.STUDENT_NOT_FOUND;
 
@@ -22,6 +24,7 @@ class UpdatePasswordCommandHandler {
     SecurityService securityService;
 
     ApiResult<StudentIdentification> handle(UpdatePasswordCommand command) {
+        log.info("Handling; {}", command);
         var id = command.id();
         var password = command.password();
         if (StringUtils.isBlank(password)) {
@@ -30,7 +33,7 @@ class UpdatePasswordCommandHandler {
         }
         return studentQueryRepository.findById(id)
                 .map(snapshot -> updatePassword(snapshot, password))
-                .orElseGet(() -> resultFactory.create(STUDENT_NOT_FOUND));
+                .orElseGet(() -> notFoundResult(id));
     }
 
     private ApiResult<StudentIdentification> updatePassword(StudentSnapshot snapshot, String password) {
@@ -39,6 +42,12 @@ class UpdatePasswordCommandHandler {
         student.updatePassword(encodedPassword);
         var savedStudent = studentWriteRepository.save(student.createSnapshot());
         var studentIdentification = studentMapper.toStudentIdentification(savedStudent);
+        log.info("Student's password updated successfully for: {}", studentIdentification);
         return resultFactory.create(studentIdentification);
+    }
+
+    private ApiResult<StudentIdentification> notFoundResult(UUID id) {
+        log.error("Cannot add student with id {}, because not found", id);
+        return resultFactory.create(STUDENT_NOT_FOUND);
     }
 }

@@ -12,4 +12,14 @@ public record AddStudentCommand(
         String lastName,
         LocalDate birthDate
 ) {
+
+    @Override
+    public String toString() {
+        return "AddStudentCommand[" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ']';
+    }
 }
