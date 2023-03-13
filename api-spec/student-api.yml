@@ -53,10 +53,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
-        '409':
-          $ref: '#/components/responses/409Conflict'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '422':
+          $ref: '#/components/responses/422UnprocessableEntity'
         '500':
           $ref: '#/components/responses/500InternalServerError'
     get:
@@ -111,6 +113,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StudentDto'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         '500':
@@ -141,6 +145,8 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
+        '422':
+          $ref: '#/components/responses/422UnprocessableEntity'
         '500':
           $ref: '#/components/responses/500InternalServerError'
     delete:
@@ -154,6 +160,8 @@ paths:
       responses:
         '204':
           description: Student's account data edited successfully
+        '400':
+          $ref: '#/components/responses/400BadRequest'
         '500':
           $ref: '#/components/responses/500InternalServerError'
   /student/{id}/password:
@@ -186,6 +194,8 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
+        '422':
+          $ref: '#/components/responses/422UnprocessableEntity'
         '500':
           $ref: '#/components/responses/500InternalServerError'
 components:
@@ -275,7 +285,7 @@ components:
         $ref: '#/components/schemas/UUID'
   responses:
     400BadRequest:
-      description: Invalid credentials
+      description: Bad request
     404NotFound:
       description: Student not found
     409Conflict:
@@ -283,6 +293,8 @@ components:
       headers:
         Location:
           $ref: '#/components/headers/Location'
+    422UnprocessableEntity:
+      description: Invalid credentials
     500InternalServerError:
       description: Unknown error
   headers:

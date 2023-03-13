@@ -64,7 +64,7 @@ class StudentController implements StudentApi {
 
     private <T, R> ResponseEntity<R> buildErrorResponseFrom(ApiResult<T> result) {
         return (switch (result.code()) {
-            case INVALID_CREDENTIALS -> ResponseEntity.badRequest();
+            case INVALID_CREDENTIALS -> ResponseEntity.unprocessableEntity();
             case STUDENT_NOT_FOUND -> ResponseEntity.notFound();
             case STUDENT_ALREADY_EXISTS -> ResponseEntity
                     .status(CONFLICT)
