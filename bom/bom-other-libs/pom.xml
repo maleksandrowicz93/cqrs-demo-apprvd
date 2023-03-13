@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.maleksandrowicz93</groupId>
+    <artifactId>bom-other-libs</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>bom-other-libs</name>
+    <packaging>pom</packaging>
+    <description>Bill of Materials for other dependencies</description>
+
+    <properties>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <vavr.version>0.10.4</vavr.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>${lombok-mapstruct.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

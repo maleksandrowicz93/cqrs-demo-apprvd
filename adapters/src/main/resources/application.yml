@@ -1,0 +1,19 @@
+server:
+  port : 8000
+  servlet:
+    context-path: /cqrs-demo
+allowed-origins:
+  front-end: http://localhost:4200
+spring:
+  datasource:
+    url: jdbc:h2:mem:cqrs-demo
+    username: user
+    password: 1234
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    change-log: classpath:liquibase-changelog/liquibase-changelog.yml
