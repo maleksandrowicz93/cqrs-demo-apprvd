@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.maleksandrowicz93</groupId>
+    <artifactId>bom-modules</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>bom-modules</name>
+    <packaging>pom</packaging>
+    <description>Bill of Materials for project modules dependencies</description>
+
+    <properties>
+        <root.version>0.0.1-SNAPSHOT</root.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>adapters</artifactId>
+                <version>${root.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>app</artifactId>
+                <version>${root.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>domain</artifactId>
+                <version>${root.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>monolith</artifactId>
+                <version>${root.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.maleksandrowicz93</groupId>
+                <artifactId>shared</artifactId>
+                <version>${root.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
